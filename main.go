@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
+	"strings"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
@@ -16,15 +17,20 @@ const (
 )
 
 var (
-	token = flag.String("t", "", "bot token")
-
 	commandRegExp = regexp.MustCompile(`^dokkoi\s(.+)\s(.+)$`)
 )
 
 func main() {
+	var token string
+	flag.StringVar(&token, "token", "", "bot token")
+	flag.VisitAll(func(f *flag.Flag) {
+		if v, ok := os.LookupEnv(strings.ToUpper(f.Name)); ok {
+			f.Value.Set(v)
+		}
+	})
 	flag.Parse()
 
-	dg, err := discordgo.New("Bot " + *token)
+	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
 		fmt.Println("creating discord session is fail, ", err)
 		return
@@ -55,7 +61,6 @@ func main() {
 func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	cmd := commandRegExp.FindStringSubmatch(m.Content)
 	if len(cmd) != 3 {
-		fmt.Println("invalid command, ", m.Content)
 		return
 	}
 	switch {
