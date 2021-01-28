@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"regexp"
@@ -32,7 +32,7 @@ func main() {
 
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
-		fmt.Println("creating discord session is fail, ", err)
+		log.Printf("creating discord session is fail. err: %v ", err)
 		return
 	}
 
@@ -45,13 +45,13 @@ func main() {
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
 	if err != nil {
-		fmt.Println("opening discord connection is fail, ", err)
+		log.Printf("opening discord connection is fail. err: %v ", err)
 		return
 	}
 	defer dg.Close()
 
 	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	log.Print("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
@@ -71,8 +71,7 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func sendMessage(s *discordgo.Session, channelID, message string) {
 	if _, err := s.ChannelMessageSend(channelID, message); err != nil {
-		fmt.Println("error sending message, ", err)
+		log.Printf("error sending message. err: %v", err)
 		return
 	}
-	fmt.Println(">>> ", message)
 }

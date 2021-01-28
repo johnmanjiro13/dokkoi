@@ -1,1 +1,1 @@
-web: bin/dokkoi
+worker: bin/dokkoi
