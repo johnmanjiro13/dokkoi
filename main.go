@@ -5,13 +5,20 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"regexp"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 )
 
+const (
+	echoCmd = "echo"
+)
+
 var (
 	token = flag.String("t", "", "bot token")
+
+	commandRegExp = regexp.MustCompile(`^dokkoi\s(.+)\s(.+)$`)
 )
 
 func main() {
@@ -46,8 +53,14 @@ func main() {
 }
 
 func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Content == "ping" {
-		sendMessage(s, m.ChannelID, "pong")
+	cmd := commandRegExp.FindStringSubmatch(m.Content)
+	if len(cmd) != 3 {
+		fmt.Println("invalid command, ", m.Content)
+		return
+	}
+	switch {
+	case cmd[1] == echoCmd:
+		sendMessage(s, m.ChannelID, cmd[2])
 	}
 }
 
