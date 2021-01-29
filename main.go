@@ -32,8 +32,7 @@ func main() {
 
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
-		log.Printf("creating discord session is fail. err: %v ", err)
-		return
+		log.Fatalf("creating discord session is fail. err: %s", err)
 	}
 
 	// Register the messageCreate func as a callback for MessageCreate events.
@@ -45,8 +44,7 @@ func main() {
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
 	if err != nil {
-		log.Printf("opening discord connection is fail. err: %v ", err)
-		return
+		log.Fatalf("opening discord connection is fail. err: %s", err)
 	}
 	defer dg.Close()
 
