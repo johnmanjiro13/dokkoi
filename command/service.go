@@ -6,15 +6,24 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var (
-	commandRegExp = regexp.MustCompile(`^dokkoi\s(.+)\s(.+)$`)
-)
+var commandRegExp = regexp.MustCompile(`^dokkoi\s(.+)\s(.+)$`)
+
+type service struct {
+}
+
+type Service interface {
+	GetCommand(content string) DokkoiCmd
+}
+
+func NewService() Service {
+	return &service{}
+}
 
 type DokkoiCmd interface {
 	SendMessage(s *discordgo.Session, channelID string) error
 }
 
-func Parse(content string) DokkoiCmd {
+func (s *service) GetCommand(content string) DokkoiCmd {
 	cmd := commandRegExp.FindStringSubmatch(content)
 	if len(cmd) != 3 {
 		return nil

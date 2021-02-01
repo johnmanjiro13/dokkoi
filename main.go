@@ -28,7 +28,10 @@ func main() {
 		log.Fatalf("creating discord session is fail. err: %s", err)
 	}
 
-	dg.AddHandler(onMessageCreate)
+	cmdService := command.NewService()
+	handler := newHandler(cmdService)
+
+	dg.AddHandler(handler.onMessageCreate)
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
@@ -43,15 +46,4 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 	return
-}
-
-func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cmd := command.Parse(m.Content)
-	if cmd == nil {
-		return
-	}
-	err := cmd.SendMessage(s, m.ChannelID)
-	if err != nil {
-		log.Printf("an error occurred in sending message. err: %s", err)
-	}
 }
