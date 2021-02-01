@@ -21,7 +21,7 @@ func NewCustomSearchRepository(service *customsearch.Service, engineID string) C
 }
 
 func (r *customSearchRepository) SearchImage(query string) (*customsearch.Search, error) {
-	search := r.svc.Cse.List().Cx(r.engineID).SearchType("image").Q(query)
+	search := r.svc.Cse.List().Cx(r.engineID).SearchType("image").Num(1).Q(query)
 	search.Start(1)
 	return search.Do()
 }
