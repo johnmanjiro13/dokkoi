@@ -1,28 +1,29 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"os"
 	"os/signal"
-	"regexp"
 	"strings"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-)
+	"google.golang.org/api/customsearch/v1"
+	"google.golang.org/api/option"
 
-const (
-	echoCmd = "echo"
-)
-
-var (
-	commandRegExp = regexp.MustCompile(`^dokkoi\s(.+)\s(.+)$`)
+	"github.com/johnmanjiro13/dokkoi/command"
+	"github.com/johnmanjiro13/dokkoi/google"
 )
 
 func main() {
 	var token string
+	var apiKey string
+	var engineID string
 	flag.StringVar(&token, "token", "", "bot token")
+	flag.StringVar(&apiKey, "api_key", "", "google api key")
+	flag.StringVar(&engineID, "engine_id", "", "google search engine id")
 	flag.VisitAll(func(f *flag.Flag) {
 		if v, ok := os.LookupEnv(strings.ToUpper(f.Name)); ok {
 			f.Value.Set(v)
@@ -32,46 +33,30 @@ func main() {
 
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
-		log.Printf("creating discord session is fail. err: %v ", err)
-		return
+		log.Fatalf("creating discord session is fail. err: %s", err)
 	}
 
-	// Register the messageCreate func as a callback for MessageCreate events.
-	dg.AddHandler(onMessageCreate)
+	csService, err := customsearch.NewService(context.Background(), option.WithAPIKey(apiKey))
+	if err != nil {
+		log.Fatalf("creating customsearch service is fail. err: %s", err)
+	}
+	csRepo := google.NewCustomSearchRepository(csService, engineID)
+	cmdService := command.NewService(csRepo)
+	handler := newHandler(cmdService)
 
-	// In this example, we only care about receiving message events.
+	dg.AddHandler(handler.onMessageCreate)
+
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
-	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
 	if err != nil {
-		log.Printf("opening discord connection is fail. err: %v ", err)
-		return
+		log.Fatalf("opening discord connection is fail. err: %s", err)
 	}
 	defer dg.Close()
 
-	// Wait here until CTRL-C or other term signal is received.
 	log.Print("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 	return
-}
-
-func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	cmd := commandRegExp.FindStringSubmatch(m.Content)
-	if len(cmd) != 3 {
-		return
-	}
-	switch {
-	case cmd[1] == echoCmd:
-		sendMessage(s, m.ChannelID, cmd[2])
-	}
-}
-
-func sendMessage(s *discordgo.Session, channelID, message string) {
-	if _, err := s.ChannelMessageSend(channelID, message); err != nil {
-		log.Printf("error sending message. err: %v", err)
-		return
-	}
 }
