@@ -13,7 +13,9 @@ type handler struct {
 }
 
 func newHandler(commandService command.Service) *handler {
-	return &handler{commandService: commandService}
+	return &handler{
+		commandService: commandService,
+	}
 }
 
 func (h *handler) onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {

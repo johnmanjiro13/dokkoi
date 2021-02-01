@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"os"
@@ -8,14 +9,21 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/johnmanjiro13/dokkoi/command"
-
 	"github.com/bwmarrin/discordgo"
+	"google.golang.org/api/customsearch/v1"
+	"google.golang.org/api/option"
+
+	"github.com/johnmanjiro13/dokkoi/command"
+	"github.com/johnmanjiro13/dokkoi/google"
 )
 
 func main() {
 	var token string
+	var apiKey string
+	var engineID string
 	flag.StringVar(&token, "token", "", "bot token")
+	flag.StringVar(&apiKey, "api_key", "", "google api key")
+	flag.StringVar(&engineID, "engine_id", "", "google search engine id")
 	flag.VisitAll(func(f *flag.Flag) {
 		if v, ok := os.LookupEnv(strings.ToUpper(f.Name)); ok {
 			f.Value.Set(v)
@@ -28,7 +36,12 @@ func main() {
 		log.Fatalf("creating discord session is fail. err: %s", err)
 	}
 
-	cmdService := command.NewService()
+	csService, err := customsearch.NewService(context.Background(), option.WithAPIKey(apiKey))
+	if err != nil {
+		log.Fatalf("creating customsearch service is fail. err: %s", err)
+	}
+	csRepo := google.NewCustomSearchRepository(csService, engineID)
+	cmdService := command.NewService(csRepo)
 	handler := newHandler(cmdService)
 
 	dg.AddHandler(handler.onMessageCreate)

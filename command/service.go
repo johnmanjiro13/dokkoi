@@ -4,19 +4,24 @@ import (
 	"regexp"
 
 	"github.com/bwmarrin/discordgo"
+
+	"github.com/johnmanjiro13/dokkoi/google"
 )
 
 var commandRegExp = regexp.MustCompile(`^dokkoi\s(.+)\s(.+)$`)
 
 type service struct {
+	customSearchRepo google.CustomSearchRepository
 }
 
 type Service interface {
 	GetCommand(content string) DokkoiCmd
 }
 
-func NewService() Service {
-	return &service{}
+func NewService(customSearchRepo google.CustomSearchRepository) Service {
+	return &service{
+		customSearchRepo: customSearchRepo,
+	}
 }
 
 type DokkoiCmd interface {
@@ -31,6 +36,11 @@ func (s *service) GetCommand(content string) DokkoiCmd {
 	switch cmd[1] {
 	case "echo":
 		return &echoCmd{message: cmd[2]}
+	case "image":
+		return &imageCmd{
+			customSearchRepo: s.customSearchRepo,
+			query:            cmd[2],
+		}
 	default:
 		return nil
 	}
