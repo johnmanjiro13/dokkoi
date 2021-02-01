@@ -27,7 +27,7 @@ func (c *imageCmd) searchImage() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if result.Items == nil {
+	if len(result.Items) <= 0 {
 		return "", errors.New("image not found")
 	}
 	item := result.Items[0]
