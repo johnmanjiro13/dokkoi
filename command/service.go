@@ -1,14 +1,12 @@
 package command
 
 import (
-	"regexp"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 
 	"github.com/johnmanjiro13/dokkoi/google"
 )
-
-var commandRegExp = regexp.MustCompile(`^dokkoi\s(.+)\s(.+)$`)
 
 type service struct {
 	customSearchRepo google.CustomSearchRepository
@@ -29,17 +27,19 @@ type DokkoiCmd interface {
 }
 
 func (s *service) GetCommand(content string) DokkoiCmd {
-	cmd := commandRegExp.FindStringSubmatch(content)
-	if len(cmd) != 3 {
+	// replace full-width whitespace to half size whitespace
+	replacedContent := strings.Replace(content, "　", " ", -1)
+	cmd := strings.Split(replacedContent, " ")
+	if len(cmd) <= 1 || cmd[0] != "dokkoi" {
 		return nil
 	}
 	switch cmd[1] {
 	case "echo":
-		return &echoCmd{message: cmd[2]}
+		return &echoCmd{message: strings.Join(cmd[2:], " ")}
 	case "image":
 		return &imageCmd{
 			customSearchRepo: s.customSearchRepo,
-			query:            cmd[2],
+			query:            strings.Join(cmd[2:], " "),
 		}
 	default:
 		return nil
