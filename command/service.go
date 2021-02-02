@@ -10,15 +10,17 @@ import (
 
 type service struct {
 	customSearchRepo google.CustomSearchRepository
+	scoreRepo        ScoreRepository
 }
 
 type Service interface {
 	GetCommand(content string) DokkoiCmd
 }
 
-func NewService(customSearchRepo google.CustomSearchRepository) Service {
+func NewService(customSearchRepo google.CustomSearchRepository, scoreRepo ScoreRepository) Service {
 	return &service{
 		customSearchRepo: customSearchRepo,
+		scoreRepo:        scoreRepo,
 	}
 }
 
@@ -27,6 +29,20 @@ type DokkoiCmd interface {
 }
 
 func (s *service) GetCommand(content string) DokkoiCmd {
+	if strings.HasSuffix(content, IncrOperator) {
+		return &scoreCmd{
+			scoreRepo: s.scoreRepo,
+			user:      content[:len(content)-2],
+			operator:  IncrOperator,
+		}
+	} else if strings.HasSuffix(content, DecrOperator) {
+		return &scoreCmd{
+			scoreRepo: s.scoreRepo,
+			user:      content[:len(content)-2],
+			operator:  DecrOperator,
+		}
+	}
+
 	// replace full-width whitespace to half size whitespace
 	replacedContent := strings.Replace(content, "　", " ", -1)
 	cmd := strings.Split(replacedContent, " ")
