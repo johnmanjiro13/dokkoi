@@ -1,7 +1,7 @@
 package command
 
 import (
-	"strconv"
+	"fmt"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -18,13 +18,26 @@ type scoreCmd struct {
 }
 
 func (c *scoreCmd) SendMessage(s *discordgo.Session, channelID string) error {
+	user := c.user
+	if user == "" {
+		user = c.scoreRepo.LastUser()
+	}
+
 	var score int
 	if c.operator == IncrOperator {
-		score = c.scoreRepo.Incr(c.user)
+		score = c.scoreRepo.Incr(user)
 	} else if c.operator == DecrOperator {
-		score = c.scoreRepo.Decr(c.user)
+		score = c.scoreRepo.Decr(user)
 	}
-	_, err := s.ChannelMessageSend(channelID, strconv.Itoa(score))
+
+	var message string
+	if score == 1 || score == -1 {
+		message = fmt.Sprintf("%s has %d point", user, score)
+	} else {
+		message = fmt.Sprintf("%s has %d points", user, score)
+	}
+
+	_, err := s.ChannelMessageSend(channelID, message)
 	return err
 }
 
@@ -34,6 +47,7 @@ type scoreRepository struct {
 }
 
 type ScoreRepository interface {
+	LastUser() string
 	Incr(user string) int
 	Decr(user string) int
 }
@@ -44,26 +58,22 @@ func NewScoreRepository(scores map[string]int) *scoreRepository {
 	}
 }
 
+func (r *scoreRepository) LastUser() string {
+	return r.lastUser
+}
+
 func (r *scoreRepository) Incr(user string) int {
-	var score int
-	if user == "" {
-		score = r.scores[r.lastUser]
-	} else {
-		score = r.scores[user]
-	}
+	score := r.scores[user]
 	score++
 	r.scores[user] = score
+	r.lastUser = user
 	return score
 }
 
 func (r *scoreRepository) Decr(user string) int {
-	var score int
-	if user == "" {
-		score = r.scores[r.lastUser]
-	} else {
-		score = r.scores[user]
-	}
+	score := r.scores[user]
 	score--
 	r.scores[user] = score
+	r.lastUser = user
 	return score
 }

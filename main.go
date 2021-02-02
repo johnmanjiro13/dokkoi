@@ -41,7 +41,8 @@ func main() {
 		log.Fatalf("creating customsearch service is fail. err: %s", err)
 	}
 	csRepo := google.NewCustomSearchRepository(csService, engineID)
-	cmdService := command.NewService(csRepo)
+	scoreRepo := command.NewScoreRepository(map[string]int{})
+	cmdService := command.NewService(csRepo, scoreRepo)
 	handler := newHandler(cmdService)
 
 	dg.AddHandler(handler.onMessageCreate)
