@@ -27,7 +27,9 @@ type DokkoiCmd interface {
 }
 
 func (s *service) GetCommand(content string) DokkoiCmd {
-	cmd := strings.Split(content, " ")
+	// replace full-width whitespace to half size whitespace
+	replacedContent := strings.Replace(content, "　", " ", -1)
+	cmd := strings.Split(replacedContent, " ")
 	if len(cmd) <= 1 || cmd[0] != "dokkoi" {
 		return nil
 	}

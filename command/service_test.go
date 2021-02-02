@@ -37,13 +37,20 @@ func TestService_GetCommand(t *testing.T) {
 				query:            "yamaha sr400",
 			},
 		},
+		"include full-width whitespace": {
+			content: "dokkoi　image　yamaha　sr400",
+			expected: &imageCmd{
+				customSearchRepo: nil,
+				query:            "yamaha sr400",
+			},
+		},
 	}
 
 	svc := service{
 		customSearchRepo: nil,
 	}
-	for desc, tt := range tests {
-		t.Run(desc, func(t *testing.T) {
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
 			cmd := svc.GetCommand(tt.content)
 			assert.Equal(t, tt.expected, cmd)
 		})
