@@ -31,9 +31,7 @@ func TestScoreRepository_Incr(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			actual := repo.Incr(tt.user)
 			assert.Equal(t, tt.expected, actual)
-			if tt.user != "" {
-				assert.Equal(t, tt.user, repo.lastUser)
-			}
+			assert.Equal(t, tt.user, repo.lastUser)
 		})
 	}
 }
