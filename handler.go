@@ -19,7 +19,7 @@ func newHandler(commandService command.Service) *handler {
 }
 
 func (h *handler) onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.Username == "dokkoi" {
+	if m.Author.Bot {
 		return
 	}
 
