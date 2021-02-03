@@ -21,7 +21,7 @@ func TestService_GetCommand(t *testing.T) {
 		},
 		"help and other": {
 			content:  "dokkoi help image",
-			expected: nil,
+			expected: &helpCmd{target: "image"},
 		},
 		"echo": {
 			content:  "dokkoi echo hoge",
