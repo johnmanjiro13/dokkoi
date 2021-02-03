@@ -26,6 +26,22 @@ func TestService_GetCommand(t *testing.T) {
 				query:            "z900rs",
 			},
 		},
+		"score incr": {
+			content: "John Doe++",
+			expected: &scoreCmd{
+				scoreRepo: nil,
+				user:      "John Doe",
+				operator:  IncrOperator,
+			},
+		},
+		"score decr": {
+			content: "Jane Doe --",
+			expected: &scoreCmd{
+				scoreRepo: nil,
+				user:      "Jane Doe ",
+				operator:  DecrOperator,
+			},
+		},
 		"dokkoi only": {
 			content:  "dokkoi",
 			expected: nil,
@@ -48,6 +64,7 @@ func TestService_GetCommand(t *testing.T) {
 
 	svc := service{
 		customSearchRepo: nil,
+		scoreRepo:        nil,
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
