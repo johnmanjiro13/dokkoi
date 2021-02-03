@@ -50,6 +50,12 @@ func (s *service) GetCommand(content string) DokkoiCmd {
 		return nil
 	}
 	switch cmd[1] {
+	case "help":
+		// return helpCmd only in the case of  'dokkoi help' was sent as of now.
+		if len(cmd) == 2 {
+			return &helpCmd{}
+		}
+		return nil
 	case "echo":
 		return &echoCmd{message: strings.Join(cmd[2:], " ")}
 	case "image":

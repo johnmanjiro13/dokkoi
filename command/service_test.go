@@ -15,6 +15,14 @@ func TestService_GetCommand(t *testing.T) {
 			content:  "work",
 			expected: nil,
 		},
+		"help": {
+			content:  "dokkoi help",
+			expected: &helpCmd{},
+		},
+		"help and other": {
+			content:  "dokkoi help image",
+			expected: nil,
+		},
 		"echo": {
 			content:  "dokkoi echo hoge",
 			expected: &echoCmd{message: "hoge"},
