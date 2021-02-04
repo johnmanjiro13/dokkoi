@@ -5,6 +5,7 @@ go 1.14
 
 require (
 	github.com/bwmarrin/discordgo v0.23.1
+	github.com/golang/mock v1.4.4
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/stretchr/testify v1.5.1
 	google.golang.org/api v0.38.0
