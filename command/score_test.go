@@ -31,7 +31,7 @@ func TestScoreRepository_Incr(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			actual := repo.Incr(tt.user)
 			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.lastUser)
+			assert.Equal(t, tt.user, repo.LastUser())
 		})
 	}
 }
@@ -61,7 +61,7 @@ func TestScoreRepository_Decr(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			actual := repo.Decr(tt.user)
 			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.lastUser)
+			assert.Equal(t, tt.user, repo.LastUser())
 		})
 	}
 }

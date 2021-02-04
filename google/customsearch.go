@@ -2,6 +2,8 @@ package google
 
 import (
 	"google.golang.org/api/customsearch/v1"
+
+	"github.com/johnmanjiro13/dokkoi/command"
 )
 
 type customSearchRepository struct {
@@ -9,11 +11,7 @@ type customSearchRepository struct {
 	engineID string
 }
 
-type CustomSearchRepository interface {
-	SearchImage(query string) (*customsearch.Search, error)
-}
-
-func NewCustomSearchRepository(service *customsearch.Service, engineID string) CustomSearchRepository {
+func NewCustomSearchRepository(service *customsearch.Service, engineID string) command.CustomSearchRepository {
 	return &customSearchRepository{
 		svc:      service,
 		engineID: engineID,

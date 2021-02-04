@@ -4,12 +4,10 @@ import (
 	"errors"
 
 	"github.com/bwmarrin/discordgo"
-
-	"github.com/johnmanjiro13/dokkoi/google"
 )
 
 type imageCmd struct {
-	customSearchRepo google.CustomSearchRepository
+	customSearchRepo CustomSearchRepository
 	query            string
 }
 

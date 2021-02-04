@@ -52,7 +52,7 @@ type ScoreRepository interface {
 	Decr(user string) int
 }
 
-func NewScoreRepository(scores map[string]int) *scoreRepository {
+func NewScoreRepository(scores map[string]int) ScoreRepository {
 	return &scoreRepository{
 		scores: scores,
 	}
