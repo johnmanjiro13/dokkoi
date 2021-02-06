@@ -34,10 +34,10 @@ func (m *MockCustomSearchRepository) EXPECT() *MockCustomSearchRepositoryMockRec
 }
 
 // SearchImage mocks base method
-func (m *MockCustomSearchRepository) SearchImage(arg0 string) (*customsearch.Search, error) {
+func (m *MockCustomSearchRepository) SearchImage(arg0 string) (*customsearch.Result, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchImage", arg0)
-	ret0, _ := ret[0].(*customsearch.Search)
+	ret0, _ := ret[0].(*customsearch.Result)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

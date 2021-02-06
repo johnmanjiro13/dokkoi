@@ -13,17 +13,21 @@ import (
 func TestImageCmd_searchImage(t *testing.T) {
 	tests := map[string]struct {
 		query    string
-		search   *customsearch.Search
+		image    *customsearch.Result
+		err      error
 		expected string
 	}{
 		"normal success": {
-			query: "dragapult",
-			search: &customsearch.Search{
-				Items: []*customsearch.Result{
-					{Link: "https://example.com/dragapult.jpeg"},
-				},
-			},
+			query:    "dragapult",
+			image:    &customsearch.Result{Link: "https://example.com/dragapult.jpeg"},
+			err:      nil,
 			expected: "https://example.com/dragapult.jpeg",
+		},
+		"not found": {
+			query:    "not found",
+			image:    nil,
+			err:      ErrImageNotFound,
+			expected: "image was not found",
 		},
 	}
 
@@ -33,7 +37,7 @@ func TestImageCmd_searchImage(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			mockCustomSearchRepo.EXPECT().SearchImage(tt.query).Return(tt.search, nil)
+			mockCustomSearchRepo.EXPECT().SearchImage(tt.query).Return(tt.image, tt.err)
 			cmd := &imageCmd{
 				customSearchRepo: mockCustomSearchRepo,
 				query:            tt.query,
