@@ -1,6 +1,7 @@
 package command
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -12,8 +13,10 @@ type service struct {
 	scoreRepo        ScoreRepository
 }
 
+var ErrImageNotFound = errors.New("image was not found.")
+
 type CustomSearchRepository interface {
-	SearchImage(query string) (*customsearch.Search, error)
+	SearchImage(query string) (*customsearch.Result, error)
 }
 
 type Service interface {

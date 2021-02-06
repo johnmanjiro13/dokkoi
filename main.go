@@ -4,10 +4,12 @@ import (
 	"context"
 	"flag"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"google.golang.org/api/customsearch/v1"
@@ -18,9 +20,9 @@ import (
 )
 
 func main() {
-	var token string
-	var apiKey string
-	var engineID string
+	rand.Seed(time.Now().UnixNano())
+
+	var token, apiKey, engineID string
 	flag.StringVar(&token, "token", "", "bot token")
 	flag.StringVar(&apiKey, "api_key", "", "google api key")
 	flag.StringVar(&engineID, "engine_id", "", "google search engine id")
