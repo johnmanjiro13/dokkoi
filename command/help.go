@@ -14,6 +14,7 @@ var descriptions = map[string]string{
 	"help":  "dokkoi help - Displays all of the help commands that this bot knows about.\ndokkoi help <query> - Displays all help commands that match <query>.",
 	"echo":  "dokkoi echo <text> - Reply back with <text>",
 	"image": "dokkoi image <query> - Queries Google Images for <query> and returns a top result.",
+	"score": "dokkoi score <name> - Display the score for a name.",
 	"++":    "<name>++ - Increment score for a name",
 	"--":    "<name>-- - Decrement score for a name",
 }
