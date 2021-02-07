@@ -6,6 +6,40 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestScoreCmd_CalcScore(t *testing.T) {
+	scores := map[string]int{
+		"johnman": 1,
+		"625":     2,
+	}
+	repo := NewScoreRepository(scores)
+
+	tests := map[string]struct {
+		user     string
+		expected int
+	}{
+		"user already exists": {
+			user:     "johnman",
+			expected: 2,
+		},
+		"user not exists": {
+			user:     "kairyu",
+			expected: 1,
+		},
+	}
+
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			cmd := &scoreCmd{
+				scoreRepo: repo,
+				user:      tt.user,
+				operator:  incrOperator,
+			}
+			actual := cmd.calcScore()
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
 func TestScoreRepository_Incr(t *testing.T) {
 	scores := map[string]int{
 		"johnman": 1,

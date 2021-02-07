@@ -38,7 +38,7 @@ func TestService_GetCommand(t *testing.T) {
 			content: "John Doe++",
 			expected: &scoreCmd{
 				scoreRepo: nil,
-				user:      "John Doe",
+				user:      "JohnDoe",
 				operator:  incrOperator,
 			},
 		},
@@ -46,7 +46,7 @@ func TestService_GetCommand(t *testing.T) {
 			content: "Jane Doe --",
 			expected: &scoreCmd{
 				scoreRepo: nil,
-				user:      "Jane Doe ",
+				user:      "JaneDoe",
 				operator:  decrOperator,
 			},
 		},
