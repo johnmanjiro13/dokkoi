@@ -2,8 +2,6 @@ package command
 
 import (
 	"strings"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 type helpCmd struct {
@@ -19,15 +17,13 @@ var descriptions = map[string]string{
 	"--":    "<name>-- - Decrement score for a name",
 }
 
-func (c *helpCmd) SendMessage(s *discordgo.Session, channelID string) error {
-	var desc string
+func (c *helpCmd) Exec() (desc string, err error) {
 	if c.target == "" {
 		desc = strings.Join(values(descriptions), "\n")
 	} else {
 		desc = descriptions[c.target]
 	}
-	_, err := s.ChannelMessageSend(channelID, desc)
-	return err
+	return
 }
 
 func values(m map[string]string) (s []string) {

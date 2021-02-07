@@ -4,7 +4,6 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/bwmarrin/discordgo"
 	"google.golang.org/api/customsearch/v1"
 )
 
@@ -31,7 +30,7 @@ func NewService(customSearchRepo CustomSearchRepository, scoreRepo ScoreReposito
 }
 
 type DokkoiCmd interface {
-	SendMessage(s *discordgo.Session, channelID string) error
+	Exec() (string, error)
 }
 
 func (s *service) GetCommand(content string) DokkoiCmd {

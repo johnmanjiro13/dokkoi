@@ -2,8 +2,6 @@ package command
 
 import (
 	"fmt"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 const (
@@ -18,7 +16,7 @@ type scoreCmd struct {
 	operator  string
 }
 
-func (c *scoreCmd) SendMessage(s *discordgo.Session, channelID string) error {
+func (c *scoreCmd) Exec() (string, error) {
 	if c.user == "" {
 		c.user = c.scoreRepo.LastUser()
 	}
@@ -36,9 +34,7 @@ func (c *scoreCmd) SendMessage(s *discordgo.Session, channelID string) error {
 	} else {
 		message = fmt.Sprintf("%s has %d points", c.user, score)
 	}
-
-	_, err := s.ChannelMessageSend(channelID, message)
-	return err
+	return message, nil
 }
 
 func (c *scoreCmd) calcScore() int {

@@ -27,8 +27,12 @@ func (h *handler) onMessageCreate(s *discordgo.Session, m *discordgo.MessageCrea
 	if cmd == nil {
 		return
 	}
-	err := cmd.SendMessage(s, m.ChannelID)
+	res, err := cmd.Exec()
 	if err != nil {
+		log.Printf("an error occurred in command execution. err: %s", err)
+		return
+	}
+	if _, err := s.ChannelMessageSend(m.ChannelID, res); err != nil {
 		log.Printf("an error occurred in sending message. err: %s", err)
 	}
 }

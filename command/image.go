@@ -1,7 +1,6 @@
 package command
 
 import (
-	"github.com/bwmarrin/discordgo"
 	pkgerrors "github.com/pkg/errors"
 )
 
@@ -10,15 +9,15 @@ type imageCmd struct {
 	query            string
 }
 
-func (c *imageCmd) SendMessage(s *discordgo.Session, channelID string) error {
+func (c *imageCmd) Exec() (string, error) {
 	url, err := c.searchImage()
 	if err != nil {
 		if pkgerrors.Is(err, ErrImageNotFound) {
-			return c.sendMessage(s, channelID, "image was not found")
+			return "image was not found", nil
 		}
-		return err
+		return "", err
 	}
-	return c.sendMessage(s, channelID, url)
+	return url, nil
 }
 
 func (c *imageCmd) searchImage() (string, error) {
@@ -27,9 +26,4 @@ func (c *imageCmd) searchImage() (string, error) {
 		return "", pkgerrors.Wrap(err, "image search failed")
 	}
 	return image.Link, nil
-}
-
-func (c *imageCmd) sendMessage(s *discordgo.Session, channelID, message string) error {
-	_, err := s.ChannelMessageSend(channelID, message)
-	return err
 }
