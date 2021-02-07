@@ -3,137 +3,115 @@ package command
 import (
 	"testing"
 
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+
+	mock_command "github.com/johnmanjiro13/dokkoi/command/mock_score"
 )
 
-func TestScoreCmd_CalcScore(t *testing.T) {
-	scores := map[string]int{
-		"johnman": 1,
-		"625":     2,
-	}
-	repo := NewScoreRepository(scores)
-
+func TestScoreCmd_Exec(t *testing.T) {
 	tests := map[string]struct {
 		user     string
-		expected int
+		lastUser string
+		operator string
+		score    int
+		expected string
 	}{
-		"user already exists": {
+		"increment result 1": {
 			user:     "johnman",
-			expected: 2,
+			lastUser: "kairyu",
+			operator: incrOperator,
+			score:    1,
+			expected: "johnman has 1 point",
 		},
-		"user not exists": {
-			user:     "kairyu",
-			expected: 1,
+		"decrement result 2": {
+			user:     "johnman",
+			lastUser: "kairyu",
+			operator: decrOperator,
+			score:    2,
+			expected: "johnman has 2 points",
+		},
+		"no operator": {
+			user:     "johnman",
+			lastUser: "kairyu",
+			operator: noOperator,
+			score:    2,
+			expected: "johnman has 2 points",
+		},
+		"last user": {
+			user:     "",
+			lastUser: "kairyu",
+			operator: incrOperator,
+			score:    2,
+			expected: "kairyu has 2 points",
 		},
 	}
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mockScoreRepo := mock_command.NewMockScoreRepository(ctrl)
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			cmd := &scoreCmd{
-				scoreRepo: repo,
+				scoreRepo: mockScoreRepo,
 				user:      tt.user,
-				operator:  incrOperator,
+				operator:  tt.operator,
 			}
-			actual := cmd.calcScore()
+			switch tt.operator {
+			case incrOperator:
+				if tt.user != "" {
+					mockScoreRepo.EXPECT().Incr(tt.user).Return(tt.score)
+				} else {
+					mockScoreRepo.EXPECT().LastUser().Return(tt.lastUser)
+					mockScoreRepo.EXPECT().Incr(tt.lastUser).Return(tt.score)
+				}
+			case decrOperator:
+				mockScoreRepo.EXPECT().Decr(tt.user).Return(tt.score)
+			case noOperator:
+				mockScoreRepo.EXPECT().UserScore(tt.user).Return(tt.score)
+			}
+			actual, err := cmd.Exec()
+			if err != nil {
+				t.Fatal(err)
+			}
 			assert.Equal(t, tt.expected, actual)
 		})
 	}
 }
 
-func TestScoreRepository_Incr(t *testing.T) {
-	scores := map[string]int{
-		"johnman": 1,
-		"625":     2,
-	}
-	repo := NewScoreRepository(scores)
-
+func TestScoreCmd_CalcScore(t *testing.T) {
 	tests := map[string]struct {
 		user     string
-		expected int
+		operator string
 	}{
-		"user already exists": {
+		"incr": {
 			user:     "johnman",
-			expected: 2,
+			operator: incrOperator,
 		},
-		"user not exists": {
+		"decr": {
 			user:     "kairyu",
-			expected: 1,
+			operator: decrOperator,
 		},
 	}
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mockScoreRepo := mock_command.NewMockScoreRepository(ctrl)
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual := repo.Incr(tt.user)
-			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.LastUser())
-		})
-	}
-}
-
-func TestScoreRepository_Decr(t *testing.T) {
-	scores := map[string]int{
-		"johnman": 1,
-		"625":     2,
-	}
-	repo := NewScoreRepository(scores)
-
-	tests := map[string]struct {
-		user     string
-		expected int
-	}{
-		"user already exists": {
-			user:     "johnman",
-			expected: 0,
-		},
-		"user not exists": {
-			user:     "kairyu",
-			expected: -1,
-		},
-	}
-
-	for name, tt := range tests {
-		t.Run(name, func(t *testing.T) {
-			actual := repo.Decr(tt.user)
-			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.LastUser())
-		})
-	}
-}
-
-func TestScoreRepository_LastUser(t *testing.T) {
-	scores := map[string]int{}
-	repo := NewScoreRepository(scores)
-	repo.Incr("johnman")
-	assert.Equal(t, "johnman", repo.LastUser())
-	repo.Decr("god")
-	assert.Equal(t, "god", repo.LastUser())
-}
-
-func TestScoreRepository_UserScore(t *testing.T) {
-	scores := map[string]int{
-		"johnman": 1,
-		"625":     2,
-	}
-	repo := NewScoreRepository(scores)
-
-	tests := map[string]struct {
-		user     string
-		expected int
-	}{
-		"user already exists": {
-			user:     "johnman",
-			expected: 1,
-		},
-		"user not exists": {
-			user:     "kairyu",
-			expected: 0,
-		},
-	}
-
-	for name, tt := range tests {
-		t.Run(name, func(t *testing.T) {
-			actual := repo.UserScore(tt.user)
-			assert.Equal(t, tt.expected, actual)
+			cmd := &scoreCmd{
+				scoreRepo: mockScoreRepo,
+				user:      tt.user,
+				operator:  tt.operator,
+			}
+			if tt.operator == incrOperator {
+				mockScoreRepo.EXPECT().Incr(tt.user)
+			} else if tt.operator == decrOperator {
+				mockScoreRepo.EXPECT().Decr(tt.user)
+			}
+			cmd.calcScore()
 		})
 	}
 }

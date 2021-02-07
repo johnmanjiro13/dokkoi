@@ -2,8 +2,6 @@ package command
 
 import (
 	"fmt"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 const (
@@ -18,7 +16,7 @@ type scoreCmd struct {
 	operator  string
 }
 
-func (c *scoreCmd) SendMessage(s *discordgo.Session, channelID string) error {
+func (c *scoreCmd) Exec() (string, error) {
 	if c.user == "" {
 		c.user = c.scoreRepo.LastUser()
 	}
@@ -36,9 +34,7 @@ func (c *scoreCmd) SendMessage(s *discordgo.Session, channelID string) error {
 	} else {
 		message = fmt.Sprintf("%s has %d points", c.user, score)
 	}
-
-	_, err := s.ChannelMessageSend(channelID, message)
-	return err
+	return message, nil
 }
 
 func (c *scoreCmd) calcScore() int {
@@ -47,46 +43,4 @@ func (c *scoreCmd) calcScore() int {
 	} else {
 		return c.scoreRepo.Decr(c.user)
 	}
-}
-
-type scoreRepository struct {
-	scores   map[string]int
-	lastUser string
-}
-
-type ScoreRepository interface {
-	LastUser() string
-	Incr(user string) int
-	Decr(user string) int
-	UserScore(user string) int
-}
-
-func NewScoreRepository(scores map[string]int) ScoreRepository {
-	return &scoreRepository{
-		scores: scores,
-	}
-}
-
-func (r *scoreRepository) LastUser() string {
-	return r.lastUser
-}
-
-func (r *scoreRepository) Incr(user string) int {
-	score := r.scores[user]
-	score++
-	r.scores[user] = score
-	r.lastUser = user
-	return score
-}
-
-func (r *scoreRepository) Decr(user string) int {
-	score := r.scores[user]
-	score--
-	r.scores[user] = score
-	r.lastUser = user
-	return score
-}
-
-func (r *scoreRepository) UserScore(user string) int {
-	return r.scores[user]
 }

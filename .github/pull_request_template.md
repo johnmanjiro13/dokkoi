@@ -1,4 +1,6 @@
 ## Description
 
 ## Checks
-- [ ] If you added some new commands, did you add descriptions to the help command?
+- [ ] Did you add some new commands?
+    - [ ] You added descriptions to the help command.
+    - [ ] You added test cases to the `service_test.go`.

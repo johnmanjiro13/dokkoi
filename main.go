@@ -16,7 +16,8 @@ import (
 	"google.golang.org/api/option"
 
 	"github.com/johnmanjiro13/dokkoi/command"
-	"github.com/johnmanjiro13/dokkoi/google"
+	"github.com/johnmanjiro13/dokkoi/infra/google"
+	"github.com/johnmanjiro13/dokkoi/infra/inmem"
 )
 
 func main() {
@@ -43,7 +44,7 @@ func main() {
 		log.Fatalf("creating customsearch service is fail. err: %s", err)
 	}
 	csRepo := google.NewCustomSearchRepository(csService, engineID)
-	scoreRepo := command.NewScoreRepository(map[string]int{})
+	scoreRepo := inmem.NewScoreRepository(map[string]int{})
 	cmdService := command.NewService(csRepo, scoreRepo)
 	handler := newHandler(cmdService)
 

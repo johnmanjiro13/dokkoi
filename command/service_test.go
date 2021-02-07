@@ -50,6 +50,14 @@ func TestService_GetCommand(t *testing.T) {
 				operator:  decrOperator,
 			},
 		},
+		"score user": {
+			content: "dokkoi score john",
+			expected: &scoreCmd{
+				scoreRepo: nil,
+				user:      "john",
+				operator:  noOperator,
+			},
+		},
 		"dokkoi only": {
 			content:  "dokkoi",
 			expected: nil,
