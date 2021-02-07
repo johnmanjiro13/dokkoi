@@ -1,10 +1,7 @@
 package command
 
 import (
-	"errors"
 	"strings"
-
-	"google.golang.org/api/customsearch/v1"
 )
 
 type service struct {
@@ -12,31 +9,11 @@ type service struct {
 	scoreRepo        ScoreRepository
 }
 
-var ErrImageNotFound = errors.New("image was not found.")
-
-type CustomSearchRepository interface {
-	SearchImage(query string) (*customsearch.Result, error)
-}
-type ScoreRepository interface {
-	LastUser() string
-	Incr(user string) int
-	Decr(user string) int
-	UserScore(user string) int
-}
-
-type Service interface {
-	GetCommand(content string) DokkoiCmd
-}
-
 func NewService(customSearchRepo CustomSearchRepository, scoreRepo ScoreRepository) Service {
 	return &service{
 		customSearchRepo: customSearchRepo,
 		scoreRepo:        scoreRepo,
 	}
-}
-
-type DokkoiCmd interface {
-	Exec() (string, error)
 }
 
 func (s *service) GetCommand(content string) DokkoiCmd {
