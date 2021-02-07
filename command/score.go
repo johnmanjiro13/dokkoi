@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	IncrOperator = "++"
-	DecrOperator = "--"
+	noOperator   = "none"
+	incrOperator = "++"
+	decrOperator = "--"
 )
 
 type scoreCmd struct {
@@ -24,9 +25,9 @@ func (c *scoreCmd) SendMessage(s *discordgo.Session, channelID string) error {
 	}
 
 	var score int
-	if c.operator == IncrOperator {
+	if c.operator == incrOperator {
 		score = c.scoreRepo.Incr(user)
-	} else if c.operator == DecrOperator {
+	} else if c.operator == decrOperator {
 		score = c.scoreRepo.Decr(user)
 	}
 
@@ -50,6 +51,7 @@ type ScoreRepository interface {
 	LastUser() string
 	Incr(user string) int
 	Decr(user string) int
+	UserScore(user string) int
 }
 
 func NewScoreRepository(scores map[string]int) ScoreRepository {
@@ -76,4 +78,8 @@ func (r *scoreRepository) Decr(user string) int {
 	r.scores[user] = score
 	r.lastUser = user
 	return score
+}
+
+func (r *scoreRepository) UserScore(user string) int {
+	return r.scores[user]
 }
