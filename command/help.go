@@ -1,6 +1,7 @@
 package command
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -30,5 +31,6 @@ func values(m map[string]string) (s []string) {
 	for _, v := range m {
 		s = append(s, v)
 	}
+	sort.Strings(s)
 	return
 }
