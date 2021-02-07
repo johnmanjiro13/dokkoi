@@ -9,7 +9,7 @@ $ go get github.com/johnmanjiro13/dokkoi
 ```
 
 ## usage
-You must set a token of discord bot, an api key and engine id of google custom search.
+You must set a token of discord bot, an api key and engine id of google custom search.  
 You can set them either environment variables or flags.
 
 With environment variables:
@@ -22,4 +22,4 @@ With flags:
 $ dokkoi --token <YOUR_TOKEN> --api_key <YOUR_API_KEY> --engine_id <YOUR_ENGINE_ID>
 ```
 
-You can execute dokkoi's commands with `dokkoi` prefix in discord like `dokkoi echo hoge`
+You can see a help for dokkoi's commands with `dokkoi help` command.
