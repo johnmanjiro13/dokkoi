@@ -38,16 +38,16 @@ func TestService_GetCommand(t *testing.T) {
 			content: "John Doe++",
 			expected: &scoreCmd{
 				scoreRepo: nil,
-				user:      "John Doe",
-				operator:  IncrOperator,
+				user:      "JohnDoe",
+				operator:  incrOperator,
 			},
 		},
 		"score decr": {
 			content: "Jane Doe --",
 			expected: &scoreCmd{
 				scoreRepo: nil,
-				user:      "Jane Doe ",
-				operator:  DecrOperator,
+				user:      "JaneDoe",
+				operator:  decrOperator,
 			},
 		},
 		"dokkoi only": {

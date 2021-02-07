@@ -48,17 +48,26 @@ func (s *service) GetCommand(content string) DokkoiCmd {
 			customSearchRepo: s.customSearchRepo,
 			query:            strings.Join(cmd[2:], " "),
 		}
-	case strings.HasSuffix(content, IncrOperator):
+	case len(cmd) >= 3 && cmd[1] == "score":
+		user := strings.Join(cmd[2:], "")
 		return &scoreCmd{
 			scoreRepo: s.scoreRepo,
-			user:      content[:len(content)-2],
-			operator:  IncrOperator,
+			user:      user,
+			operator:  noOperator,
 		}
-	case strings.HasSuffix(content, DecrOperator):
+	case strings.HasSuffix(content, incrOperator):
+		user := strings.Replace(content[:len(content)-2], " ", "", -1)
 		return &scoreCmd{
 			scoreRepo: s.scoreRepo,
-			user:      content[:len(content)-2],
-			operator:  DecrOperator,
+			user:      user,
+			operator:  incrOperator,
+		}
+	case strings.HasSuffix(content, decrOperator):
+		user := strings.Replace(content[:len(content)-2], " ", "", -1)
+		return &scoreCmd{
+			scoreRepo: s.scoreRepo,
+			user:      user,
+			operator:  decrOperator,
 		}
 	default:
 		return nil
