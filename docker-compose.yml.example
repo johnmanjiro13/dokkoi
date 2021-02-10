@@ -6,11 +6,12 @@ services:
       - 5432:5432
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ""
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: test
       POSTGRES_HOST_AUTH_METHOD: "trust"
     volumes:
       - ${HOME}/data/dokkoi_db:/var/lib/postgresql
+      - ./fixtures/postgresql/init:/docker-entrypoint-initdb.d
   dokkoi:
     image: golang:1.15
     working_dir: /dokkoi

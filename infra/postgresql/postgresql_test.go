@@ -1,8 +1,8 @@
 package postgresql
 
 import (
+	"database/sql"
 	"log"
-	"os"
 	"testing"
 )
 
@@ -12,14 +12,30 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatalf("db opening failed. err: %v", err)
 	}
+	defer db.Close()
 
-	defer func() {
-		if err := db.Close(); err != nil {
-			log.Fatalf("db closing failed. err: %v", err)
-		}
-	}()
-
+	setup(db)
 	// run tests
-	code := m.Run()
-	os.Exit(code)
+	m.Run()
+	teardown(db)
+}
+
+func setup(db *sql.DB) {
+	const createUsers = `
+	CREATE TABLE IF NOT EXISTS users (
+		id serial not null,
+		name varchar(255) unique not null,
+		score integer not null default 0,
+		primary key (id)
+	);`
+
+	if _, err := db.Exec(createUsers); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func teardown(db *sql.DB) {
+	if _, err := db.Exec(`TRUNCATE TABLE users RESTART IDENTITY;`); err != nil {
+		log.Fatal(err)
+	}
 }

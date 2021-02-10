@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
+
+	_ "github.com/lib/pq"
 )
 
 func init() {
@@ -19,7 +20,7 @@ func init() {
 	viper.SetDefault("postgres.host", "localhost")
 	viper.SetDefault("postgres.port", "5432")
 	viper.SetDefault("postgres.user", "postgres")
-	viper.SetDefault("postgres.password", "")
+	viper.SetDefault("postgres.password", "password")
 	viper.SetDefault("postgres.dbname", "test")
 	viper.SetDefault("postgres.sslmode", "disable")
 }
