@@ -22,7 +22,10 @@ type scoreRepository struct {
 }
 
 func NewScoreRepository(db *sql.DB) *scoreRepository {
-	return &scoreRepository{db: db}
+	return &scoreRepository{
+		db:       db,
+		lastUser: &User{},
+	}
 }
 
 func (r *scoreRepository) LastUsername() string {
@@ -38,15 +41,37 @@ func (r *scoreRepository) Incr(username string) (int, error) {
 			return 0, err
 		}
 		r.lastUser = user
-		return 1, nil
+		return user.Score, nil
 	}
 	if err != nil {
 		return 0, err
 	}
 	// increment user's score
 	user.Score++
-	err = r.updateScore(user.Name, user.Score)
+	if err := r.updateScore(user.Name, user.Score); err != nil {
+		return 0, err
+	}
+	r.lastUser = user
+	return user.Score, nil
+}
+
+func (r *scoreRepository) Decr(username string) (int, error) {
+	user, err := r.findUser(username)
+	if pkgerrors.Is(err, sql.ErrNoRows) {
+		// user does not exist
+		user, err = r.insertUser(username, decr)
+		if err != nil {
+			return 0, err
+		}
+		r.lastUser = user
+		return user.Score, nil
+	}
 	if err != nil {
+		return 0, err
+	}
+	// decrement user's score
+	user.Score--
+	if err := r.updateScore(user.Name, user.Score); err != nil {
 		return 0, err
 	}
 	r.lastUser = user
