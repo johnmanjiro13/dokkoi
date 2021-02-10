@@ -78,6 +78,17 @@ func (r *scoreRepository) Decr(username string) (int, error) {
 	return user.Score, nil
 }
 
+func (r *scoreRepository) UserScore(username string) (int, error) {
+	user, err := r.findUser(username)
+	if pkgerrors.Is(err, sql.ErrNoRows) {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, err
+	}
+	return user.Score, nil
+}
+
 func (r *scoreRepository) findUser(username string) (*User, error) {
 	var user User
 	row := r.db.QueryRow(`SELECT name, score FROM users WHERE name = $1`, username)
