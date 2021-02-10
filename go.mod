@@ -1,6 +1,6 @@
 module github.com/johnmanjiro13/dokkoi
 
-// +heroku goVersion go1.14
+// +heroku goVersion go1.15
 go 1.14
 
 require (
