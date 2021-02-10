@@ -27,9 +27,9 @@ You can see a help for dokkoi's commands with `dokkoi help` command.
 
 ## Development
 ### Run with docker-compose
-You must copy `docker-compose.yaml.example` to `docker-compose.yaml` and fill in some environment variables.
+You must copy `docker-compose.yml.example` to `docker-compose.yml` and fill in some environment variables.
 ```
-$ cp docker-compose.yaml.example docker-compose.yaml # fill in environment variables
+$ cp docker-compose.yml.example docker-compose.yml # fill in environment variables
 $ docker-compose up
 ```
 ### DB migration

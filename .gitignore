@@ -3,4 +3,4 @@ dokkoi
 .idea
 
 local_dbconfig.yml
-docker-compose.yaml
+docker-compose.yml
