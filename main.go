@@ -28,12 +28,12 @@ func init() {
 func main() {
 	dg, err := discordgo.New("Bot " + viper.GetString("discord.token"))
 	if err != nil {
-		log.Fatalf("creating discord session is fail. err: %s", err)
+		log.Fatalf("creating discord session is fail. err: %v", err)
 	}
 
 	csService, err := customsearch.NewService(context.Background(), option.WithAPIKey(viper.GetString("customsearch.api.key")))
 	if err != nil {
-		log.Fatalf("creating customsearch service is fail. err: %s", err)
+		log.Fatalf("creating customsearch service is fail. err: %v", err)
 	}
 	csRepo := google.NewCustomSearchRepository(csService, viper.GetString("customsearch.engine.id"))
 	scoreRepo := inmem.NewScoreRepository(map[string]int{})
@@ -46,7 +46,7 @@ func main() {
 
 	err = dg.Open()
 	if err != nil {
-		log.Fatalf("opening discord connection is fail. err: %s", err)
+		log.Fatalf("opening discord connection is fail. err: %v", err)
 	}
 	defer dg.Close()
 
