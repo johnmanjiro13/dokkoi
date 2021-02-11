@@ -1,6 +1,3 @@
 dokkoi
 .DS_Store
 .idea
-
-local_dbconfig.yml
-docker-compose.yml
