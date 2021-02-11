@@ -3,10 +3,19 @@ package google
 import (
 	"math/rand"
 
+	"github.com/spf13/viper"
 	"google.golang.org/api/customsearch/v1"
 
 	"github.com/johnmanjiro13/dokkoi/command"
 )
+
+func init() {
+	viper.BindEnv("customsearch.api.key", "CUSTOMSEARCH_API_KEY")
+	viper.BindEnv("customsearch.engine.id", "CUSTOMSEARCH_ENGINE_ID")
+
+	viper.SetDefault("customsearch.api.key", "")
+	viper.SetDefault("customsearch.engine.id", "")
+}
 
 const imageNum = 5
 
