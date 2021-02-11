@@ -1,0 +1,23 @@
+version: "3"
+services:
+  dokkoi:
+    image: golang:1.15
+    working_dir: /dokkoi
+    volumes:
+      - .:/dokkoi
+      - gomod_cache:/go
+    command: bash -c "go run main.go handler.go"
+    environment:
+      # set your environment variables
+      DISCORD_TOKEN: ""
+      CUSTOMSEARCH_API_KEY: ""
+      CUSTOMSEARCH_ENGINE_ID: ""
+    depends_on:
+      - redis
+  redis:
+    image: redis:5-alpine
+    ports:
+      - 6379:6379
+
+volumes:
+  gomod_cache: {}
