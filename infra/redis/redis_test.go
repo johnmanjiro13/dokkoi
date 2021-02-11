@@ -31,5 +31,5 @@ func TestMain(m *testing.M) {
 }
 
 func openTest() (*redis.Client, error) {
-	return Open(viper.GetString("redis.host"), viper.GetInt("redis.db"))
+	return Open(viper.GetString("redis.host"), viper.GetInt("redis.db"), viper.GetString("redis.password"))
 }
