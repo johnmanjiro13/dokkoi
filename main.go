@@ -2,16 +2,13 @@ package main
 
 import (
 	"context"
-	"flag"
 	"log"
-	"math/rand"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
-	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/spf13/viper"
 	"google.golang.org/api/customsearch/v1"
 	"google.golang.org/api/option"
 
@@ -20,30 +17,25 @@ import (
 	"github.com/johnmanjiro13/dokkoi/infra/inmem"
 )
 
+func init() {
+	viper.BindEnv("discord.token", "DISCORD_TOKEN")
+
+	viper.SetDefault("discord.token", "")
+
+	viper.AutomaticEnv()
+}
+
 func main() {
-	rand.Seed(time.Now().UnixNano())
-
-	var token, apiKey, engineID string
-	flag.StringVar(&token, "token", "", "bot token")
-	flag.StringVar(&apiKey, "api_key", "", "google api key")
-	flag.StringVar(&engineID, "engine_id", "", "google search engine id")
-	flag.VisitAll(func(f *flag.Flag) {
-		if v, ok := os.LookupEnv(strings.ToUpper(f.Name)); ok {
-			f.Value.Set(v)
-		}
-	})
-	flag.Parse()
-
-	dg, err := discordgo.New("Bot " + token)
+	dg, err := discordgo.New("Bot " + viper.GetString("discord.token"))
 	if err != nil {
 		log.Fatalf("creating discord session is fail. err: %s", err)
 	}
 
-	csService, err := customsearch.NewService(context.Background(), option.WithAPIKey(apiKey))
+	csService, err := customsearch.NewService(context.Background(), option.WithAPIKey(viper.GetString("customsearch.api.key")))
 	if err != nil {
 		log.Fatalf("creating customsearch service is fail. err: %s", err)
 	}
-	csRepo := google.NewCustomSearchRepository(csService, engineID)
+	csRepo := google.NewCustomSearchRepository(csService, viper.GetString("customsearch.engine.id"))
 	scoreRepo := inmem.NewScoreRepository(map[string]int{})
 	cmdService := command.NewService(csRepo, scoreRepo)
 	handler := newHandler(cmdService)
