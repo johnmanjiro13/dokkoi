@@ -36,7 +36,7 @@ func main() {
 		log.Fatalf("creating customsearch service is fail. err: %v", err)
 	}
 	csRepo := google.NewCustomSearchRepository(csService, viper.GetString("customsearch.engine.id"))
-	scoreRepo := inmem.NewScoreRepository(map[string]int{})
+	scoreRepo := inmem.NewScoreRepository(map[string]int64{})
 	cmdService := command.NewService(csRepo, scoreRepo)
 	handler := newHandler(cmdService)
 

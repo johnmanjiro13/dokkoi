@@ -86,10 +86,21 @@ func TestScoreRepository_Decr(t *testing.T) {
 }
 
 func TestScoreRepository_LastUser(t *testing.T) {
-	repo := NewScoreRepository(nil)
-	repo.lastUsername = "johnman"
+	cli, err := openTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cli.Close()
+	defer cli.FlushDB()
+
+	repo := NewScoreRepository(cli)
+	if _, err := repo.Incr("johnman"); err != nil {
+		t.Fatal(err)
+	}
 	assert.Equal(t, "johnman", repo.LastUsername())
-	repo.lastUsername = "god"
+	if _, err := repo.Decr("god"); err != nil {
+		t.Fatal(err)
+	}
 	assert.Equal(t, "god", repo.LastUsername())
 }
 

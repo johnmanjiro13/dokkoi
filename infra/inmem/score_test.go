@@ -7,7 +7,7 @@ import (
 )
 
 func TestScoreRepository_Incr(t *testing.T) {
-	scores := map[string]int{
+	scores := map[string]int64{
 		"johnman": 1,
 		"625":     2,
 	}
@@ -15,7 +15,7 @@ func TestScoreRepository_Incr(t *testing.T) {
 
 	tests := map[string]struct {
 		user     string
-		expected int
+		expected int64
 	}{
 		"user already exists": {
 			user:     "johnman",
@@ -29,15 +29,18 @@ func TestScoreRepository_Incr(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual := repo.Incr(tt.user)
+			actual, err := repo.Incr(tt.user)
+			if err != nil {
+				t.Fatal(err)
+			}
 			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.LastUser())
+			assert.Equal(t, tt.user, repo.LastUsername())
 		})
 	}
 }
 
 func TestScoreRepository_Decr(t *testing.T) {
-	scores := map[string]int{
+	scores := map[string]int64{
 		"johnman": 1,
 		"625":     2,
 	}
@@ -45,7 +48,7 @@ func TestScoreRepository_Decr(t *testing.T) {
 
 	tests := map[string]struct {
 		user     string
-		expected int
+		expected int64
 	}{
 		"user already exists": {
 			user:     "johnman",
@@ -59,24 +62,27 @@ func TestScoreRepository_Decr(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual := repo.Decr(tt.user)
+			actual, err := repo.Decr(tt.user)
+			if err != nil {
+				t.Fatal(err)
+			}
 			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.LastUser())
+			assert.Equal(t, tt.user, repo.LastUsername())
 		})
 	}
 }
 
 func TestScoreRepository_LastUser(t *testing.T) {
-	scores := map[string]int{}
+	scores := map[string]int64{}
 	repo := NewScoreRepository(scores)
 	repo.Incr("johnman")
-	assert.Equal(t, "johnman", repo.LastUser())
+	assert.Equal(t, "johnman", repo.LastUsername())
 	repo.Decr("god")
-	assert.Equal(t, "god", repo.LastUser())
+	assert.Equal(t, "god", repo.LastUsername())
 }
 
 func TestScoreRepository_UserScore(t *testing.T) {
-	scores := map[string]int{
+	scores := map[string]int64{
 		"johnman": 1,
 		"625":     2,
 	}
@@ -84,7 +90,7 @@ func TestScoreRepository_UserScore(t *testing.T) {
 
 	tests := map[string]struct {
 		user     string
-		expected int
+		expected int64
 	}{
 		"user already exists": {
 			user:     "johnman",
@@ -98,7 +104,10 @@ func TestScoreRepository_UserScore(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual := repo.UserScore(tt.user)
+			actual, err := repo.UserScore(tt.user)
+			if err != nil {
+				t.Fatal(err)
+			}
 			assert.Equal(t, tt.expected, actual)
 		})
 	}

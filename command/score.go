@@ -18,14 +18,23 @@ type scoreCmd struct {
 
 func (c *scoreCmd) Exec() (string, error) {
 	if c.user == "" {
-		c.user = c.scoreRepo.LastUser()
+		c.user = c.scoreRepo.LastUsername()
 	}
 
-	var score int
+	var (
+		score int64
+		err   error
+	)
 	if c.operator == incrOperator || c.operator == decrOperator {
-		score = c.calcScore()
+		score, err = c.calcScore()
+		if err != nil {
+			return "", err
+		}
 	} else if c.operator == noOperator {
-		score = c.scoreRepo.UserScore(c.user)
+		score, err = c.scoreRepo.UserScore(c.user)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	var message string
@@ -37,7 +46,7 @@ func (c *scoreCmd) Exec() (string, error) {
 	return message, nil
 }
 
-func (c *scoreCmd) calcScore() int {
+func (c *scoreCmd) calcScore() (int64, error) {
 	if c.operator == incrOperator {
 		return c.scoreRepo.Incr(c.user)
 	} else {

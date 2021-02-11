@@ -14,7 +14,7 @@ func TestScoreCmd_Exec(t *testing.T) {
 		user     string
 		lastUser string
 		operator string
-		score    int
+		score    int64
 		expected string
 	}{
 		"increment result 1": {
@@ -61,15 +61,15 @@ func TestScoreCmd_Exec(t *testing.T) {
 			switch tt.operator {
 			case incrOperator:
 				if tt.user != "" {
-					mockScoreRepo.EXPECT().Incr(tt.user).Return(tt.score)
+					mockScoreRepo.EXPECT().Incr(tt.user).Return(tt.score, nil)
 				} else {
-					mockScoreRepo.EXPECT().LastUser().Return(tt.lastUser)
-					mockScoreRepo.EXPECT().Incr(tt.lastUser).Return(tt.score)
+					mockScoreRepo.EXPECT().LastUsername().Return(tt.lastUser)
+					mockScoreRepo.EXPECT().Incr(tt.lastUser).Return(tt.score, nil)
 				}
 			case decrOperator:
-				mockScoreRepo.EXPECT().Decr(tt.user).Return(tt.score)
+				mockScoreRepo.EXPECT().Decr(tt.user).Return(tt.score, nil)
 			case noOperator:
-				mockScoreRepo.EXPECT().UserScore(tt.user).Return(tt.score)
+				mockScoreRepo.EXPECT().UserScore(tt.user).Return(tt.score, nil)
 			}
 			actual, err := cmd.Exec()
 			if err != nil {

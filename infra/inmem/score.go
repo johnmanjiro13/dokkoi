@@ -3,36 +3,36 @@ package inmem
 import "github.com/johnmanjiro13/dokkoi/command"
 
 type scoreRepository struct {
-	scores   map[string]int
-	lastUser string
+	scores       map[string]int64
+	lastUsername string
 }
 
-func NewScoreRepository(scores map[string]int) command.ScoreRepository {
+func NewScoreRepository(scores map[string]int64) command.ScoreRepository {
 	return &scoreRepository{
 		scores: scores,
 	}
 }
 
-func (r *scoreRepository) LastUser() string {
-	return r.lastUser
+func (r *scoreRepository) LastUsername() string {
+	return r.lastUsername
 }
 
-func (r *scoreRepository) Incr(user string) int {
-	score := r.scores[user]
+func (r *scoreRepository) Incr(username string) (int64, error) {
+	score := r.scores[username]
 	score++
-	r.scores[user] = score
-	r.lastUser = user
-	return score
+	r.scores[username] = score
+	r.lastUsername = username
+	return score, nil
 }
 
-func (r *scoreRepository) Decr(user string) int {
+func (r *scoreRepository) Decr(user string) (int64, error) {
 	score := r.scores[user]
 	score--
 	r.scores[user] = score
-	r.lastUser = user
-	return score
+	r.lastUsername = user
+	return score, nil
 }
 
-func (r *scoreRepository) UserScore(user string) int {
-	return r.scores[user]
+func (r *scoreRepository) UserScore(user string) (int64, error) {
+	return r.scores[user], nil
 }

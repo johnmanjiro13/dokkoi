@@ -6,6 +6,8 @@ import (
 
 	"github.com/go-redis/redis"
 	pkgerrors "github.com/pkg/errors"
+
+	"github.com/johnmanjiro13/dokkoi/command"
 )
 
 type scoreRepository struct {
@@ -13,7 +15,7 @@ type scoreRepository struct {
 	lastUsername string
 }
 
-func NewScoreRepository(cli *redis.Client) *scoreRepository {
+func NewScoreRepository(cli *redis.Client) command.ScoreRepository {
 	return &scoreRepository{cli: cli}
 }
 

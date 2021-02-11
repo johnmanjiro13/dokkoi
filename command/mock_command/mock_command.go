@@ -72,11 +72,12 @@ func (m *MockScoreRepository) EXPECT() *MockScoreRepositoryMockRecorder {
 }
 
 // Decr mocks base method
-func (m *MockScoreRepository) Decr(arg0 string) int {
+func (m *MockScoreRepository) Decr(arg0 string) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Decr", arg0)
-	ret0, _ := ret[0].(int)
-	return ret0
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Decr indicates an expected call of Decr
@@ -86,11 +87,12 @@ func (mr *MockScoreRepositoryMockRecorder) Decr(arg0 interface{}) *gomock.Call {
 }
 
 // Incr mocks base method
-func (m *MockScoreRepository) Incr(arg0 string) int {
+func (m *MockScoreRepository) Incr(arg0 string) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Incr", arg0)
-	ret0, _ := ret[0].(int)
-	return ret0
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Incr indicates an expected call of Incr
@@ -99,26 +101,27 @@ func (mr *MockScoreRepositoryMockRecorder) Incr(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Incr", reflect.TypeOf((*MockScoreRepository)(nil).Incr), arg0)
 }
 
-// LastUser mocks base method
-func (m *MockScoreRepository) LastUser() string {
+// LastUsername mocks base method
+func (m *MockScoreRepository) LastUsername() string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "LastUser")
+	ret := m.ctrl.Call(m, "LastUsername")
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
-// LastUser indicates an expected call of LastUser
-func (mr *MockScoreRepositoryMockRecorder) LastUser() *gomock.Call {
+// LastUsername indicates an expected call of LastUsername
+func (mr *MockScoreRepositoryMockRecorder) LastUsername() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LastUser", reflect.TypeOf((*MockScoreRepository)(nil).LastUser))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LastUsername", reflect.TypeOf((*MockScoreRepository)(nil).LastUsername))
 }
 
 // UserScore mocks base method
-func (m *MockScoreRepository) UserScore(arg0 string) int {
+func (m *MockScoreRepository) UserScore(arg0 string) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserScore", arg0)
-	ret0, _ := ret[0].(int)
-	return ret0
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // UserScore indicates an expected call of UserScore
