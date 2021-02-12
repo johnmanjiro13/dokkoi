@@ -15,19 +15,22 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
+	os.Exit(testMain(m))
+}
+
+func testMain(m *testing.M) int {
 	cli, err := openTest()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer func() {
+		cli.FlushDB()
 		if err := cli.Close(); err != nil {
 			log.Fatalf("failed to close connection: %v", err)
 		}
 	}()
-	defer cli.FlushDB()
 
-	code := m.Run()
-	os.Exit(code)
+	return m.Run()
 }
 
 func openTest() (*redis.Client, error) {
