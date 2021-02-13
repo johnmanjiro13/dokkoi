@@ -8,6 +8,8 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+	goredis "github.com/go-redis/redis"
+	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"google.golang.org/api/customsearch/v1"
 	"google.golang.org/api/option"
@@ -15,6 +17,7 @@ import (
 	"github.com/johnmanjiro13/dokkoi/command"
 	"github.com/johnmanjiro13/dokkoi/infra/google"
 	"github.com/johnmanjiro13/dokkoi/infra/inmem"
+	"github.com/johnmanjiro13/dokkoi/infra/redis"
 )
 
 func init() {
@@ -25,18 +28,45 @@ func init() {
 	viper.AutomaticEnv()
 }
 
+var (
+	scoreDBType = flag.StringP("scoredb-type", "s", "redis", "database type for score command")
+)
+
 func main() {
+	flag.Parse()
+
+	// setup discord session
 	dg, err := discordgo.New("Bot " + viper.GetString("discord.token"))
 	if err != nil {
-		log.Fatalf("creating discord session is fail. err: %s", err)
+		log.Fatalf("creating discord session is fail. err: %v", err)
 	}
 
+	// setup custom search service and repository
 	csService, err := customsearch.NewService(context.Background(), option.WithAPIKey(viper.GetString("customsearch.api.key")))
 	if err != nil {
-		log.Fatalf("creating customsearch service is fail. err: %s", err)
+		log.Fatalf("creating customsearch service is fail. err: %v", err)
 	}
 	csRepo := google.NewCustomSearchRepository(csService, viper.GetString("customsearch.engine.id"))
-	scoreRepo := inmem.NewScoreRepository(map[string]int{})
+
+	// setup score repository
+	var (
+		scoreRepo command.ScoreRepository
+		redisCli  *goredis.Client
+	)
+	switch *scoreDBType {
+	case "inmem":
+		scoreRepo = inmem.NewScoreRepository(map[string]int64{})
+	case "redis":
+		redisCli, err = redis.Open(viper.GetString("redis.host"), viper.GetInt("redis.db"), viper.GetString("redis.password"))
+		if err != nil {
+			log.Fatalf("connecting redis is fail. err: %v", err)
+		}
+		scoreRepo = redis.NewScoreRepository(redisCli)
+	default:
+		log.Fatalf("invalid type for score database: %s", *scoreDBType)
+	}
+
+	// setup handler
 	cmdService := command.NewService(csRepo, scoreRepo)
 	handler := newHandler(cmdService)
 
@@ -46,13 +76,15 @@ func main() {
 
 	err = dg.Open()
 	if err != nil {
-		log.Fatalf("opening discord connection is fail. err: %s", err)
+		log.Fatalf("opening discord connection is fail. err: %v", err)
 	}
-	defer dg.Close()
 
 	log.Print("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
-	return
+
+	// close connections clearly
+	dg.Close()
+	redisCli.Close()
 }

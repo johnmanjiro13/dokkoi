@@ -1,92 +1,121 @@
-package inmem
+package redis
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestScoreRepository_Incr(t *testing.T) {
-	scores := map[string]int64{
-		"johnman": 1,
-		"625":     2,
+	cli, err := openTest()
+	if err != nil {
+		t.Fatal(err)
 	}
-	repo := NewScoreRepository(scores)
+	defer cli.Close()
+	status := cli.Set("score:johnman", 1, 5*time.Minute)
+	if status.Err() != nil {
+		t.Fatal(status.Err())
+	}
+	defer cli.FlushDB()
+	repo := NewScoreRepository(cli)
 
 	tests := map[string]struct {
-		user     string
+		username string
 		expected int64
 	}{
 		"user already exists": {
-			user:     "johnman",
+			username: "johnman",
 			expected: 2,
 		},
 		"user not exists": {
-			user:     "kairyu",
+			username: "kairyu",
 			expected: 1,
 		},
 	}
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.Incr(tt.user)
+			actual, err := repo.Incr(tt.username)
 			if err != nil {
 				t.Fatal(err)
 			}
 			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.LastUsername())
+			assert.Equal(t, tt.username, repo.LastUsername())
 		})
 	}
 }
 
 func TestScoreRepository_Decr(t *testing.T) {
-	scores := map[string]int64{
-		"johnman": 1,
-		"625":     2,
+	cli, err := openTest()
+	if err != nil {
+		t.Fatal(err)
 	}
-	repo := NewScoreRepository(scores)
+	defer cli.Close()
+	status := cli.Set("score:johnman", 1, 5*time.Minute)
+	if status.Err() != nil {
+		t.Fatal(status.Err())
+	}
+	defer cli.FlushDB()
+	repo := NewScoreRepository(cli)
 
 	tests := map[string]struct {
-		user     string
+		username string
 		expected int64
 	}{
 		"user already exists": {
-			user:     "johnman",
+			username: "johnman",
 			expected: 0,
 		},
 		"user not exists": {
-			user:     "kairyu",
+			username: "kairyu",
 			expected: -1,
 		},
 	}
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.Decr(tt.user)
+			actual, err := repo.Decr(tt.username)
 			if err != nil {
 				t.Fatal(err)
 			}
 			assert.Equal(t, tt.expected, actual)
-			assert.Equal(t, tt.user, repo.LastUsername())
+			assert.Equal(t, tt.username, repo.LastUsername())
 		})
 	}
 }
 
 func TestScoreRepository_LastUser(t *testing.T) {
-	scores := map[string]int64{}
-	repo := NewScoreRepository(scores)
-	repo.Incr("johnman")
+	cli, err := openTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cli.Close()
+	defer cli.FlushDB()
+
+	repo := NewScoreRepository(cli)
+	if _, err := repo.Incr("johnman"); err != nil {
+		t.Fatal(err)
+	}
 	assert.Equal(t, "johnman", repo.LastUsername())
-	repo.Decr("god")
+	if _, err := repo.Decr("god"); err != nil {
+		t.Fatal(err)
+	}
 	assert.Equal(t, "god", repo.LastUsername())
 }
 
 func TestScoreRepository_UserScore(t *testing.T) {
-	scores := map[string]int64{
-		"johnman": 1,
-		"625":     2,
+	cli, err := openTest()
+	if err != nil {
+		t.Fatal(err)
 	}
-	repo := NewScoreRepository(scores)
+	defer cli.Close()
+	status := cli.Set("score:johnman", 1, 5*time.Minute)
+	if status.Err() != nil {
+		t.Fatal(status.Err())
+	}
+	defer cli.FlushDB()
+	repo := NewScoreRepository(cli)
 
 	tests := map[string]struct {
 		user     string
@@ -109,6 +138,7 @@ func TestScoreRepository_UserScore(t *testing.T) {
 				t.Fatal(err)
 			}
 			assert.Equal(t, tt.expected, actual)
+			assert.Equal(t, "", repo.LastUsername())
 		})
 	}
 }

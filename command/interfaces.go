@@ -21,8 +21,8 @@ type CustomSearchRepository interface {
 }
 
 type ScoreRepository interface {
-	LastUser() string
-	Incr(user string) int
-	Decr(user string) int
-	UserScore(user string) int
+	LastUsername() string
+	Incr(username string) (int64, error)
+	Decr(username string) (int64, error)
+	UserScore(username string) (int64, error)
 }

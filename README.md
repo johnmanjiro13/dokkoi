@@ -8,7 +8,7 @@ dokkoi is a friendly discord bot.
 $ go get github.com/johnmanjiro13/dokkoi
 ```
 
-## usage
+## Usage
 You must set some environment variables.
 * DISCORD_TOKEN : a token of discord bot
 * CUSTOMSEARCH_API_KEY : an api key of google custom search api
@@ -19,3 +19,11 @@ $ dokkoi
 ```
 
 You can see a help for dokkoi's commands with sending `dokkoi help` message on discord.
+
+## Development
+You can run dokkoi on the docker.
+```
+$ cp docker-compose.yml.sample docker-compose.yml
+# after setting environment variables
+$ docker-compose up
+```
