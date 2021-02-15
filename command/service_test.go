@@ -76,6 +76,10 @@ func TestService_GetCommand(t *testing.T) {
 				query:            "yamaha sr400",
 			},
 		},
+		"without dokkoi prefix": {
+			content:  "bot image yamaha",
+			expected: nil,
+		},
 	}
 
 	svc := service{
