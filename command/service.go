@@ -20,6 +20,14 @@ func (s *service) GetCommand(content string) DokkoiCmd {
 	// replace full-width whitespace to half size whitespace
 	replacedContent := strings.Replace(content, "　", " ", -1)
 	cmd := strings.Split(replacedContent, " ")
+	if cmd[0] == "dokkoi" {
+		return s.withPrefixCommand(cmd)
+	} else {
+		return s.withoutPrefixCommand(content)
+	}
+}
+
+func (s *service) withPrefixCommand(cmd []string) DokkoiCmd {
 	switch {
 	case len(cmd) >= 2 && cmd[1] == "help":
 		return &helpCmd{target: strings.Join(cmd[2:], " ")}
@@ -37,6 +45,13 @@ func (s *service) GetCommand(content string) DokkoiCmd {
 			user:      user,
 			operator:  noOperator,
 		}
+	default:
+		return nil
+	}
+}
+
+func (s *service) withoutPrefixCommand(content string) DokkoiCmd {
+	switch {
 	case strings.HasSuffix(content, incrOperator):
 		user := strings.Replace(content[:len(content)-2], " ", "", -1)
 		return &scoreCmd{
