@@ -58,6 +58,18 @@ func TestService_GetCommand(t *testing.T) {
 				operator:  noOperator,
 			},
 		},
+		"select": {
+			content: "dokkoi select john,man,jiro",
+			expected: &selectCmd{
+				elements: []string{"john", "man", "jiro"},
+			},
+		},
+		"select with whitespaces": {
+			content: "dokkoi select john, man, jiro",
+			expected: &selectCmd{
+				elements: []string{"john", "man", "jiro"},
+			},
+		},
 		"dokkoi only": {
 			content:  "dokkoi",
 			expected: nil,

@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	goredis "github.com/go-redis/redis"
@@ -34,6 +36,7 @@ var (
 
 func main() {
 	flag.Parse()
+	rand.Seed(time.Now().UnixNano())
 
 	// setup discord session
 	dg, err := discordgo.New("Bot " + viper.GetString("discord.token"))
