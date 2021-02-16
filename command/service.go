@@ -30,9 +30,13 @@ func (s *service) GetCommand(content string) DokkoiCmd {
 func (s *service) withPrefixCommand(cmd []string) DokkoiCmd {
 	switch {
 	case len(cmd) >= 2 && cmd[1] == "help":
-		return &helpCmd{target: strings.Join(cmd[2:], " ")}
+		return &helpCmd{
+			target: strings.Join(cmd[2:], " "),
+		}
 	case len(cmd) >= 3 && cmd[1] == "echo":
-		return &echoCmd{message: strings.Join(cmd[2:], " ")}
+		return &echoCmd{
+			message: strings.Join(cmd[2:], " "),
+		}
 	case len(cmd) >= 3 && cmd[1] == "image":
 		return &imageCmd{
 			customSearchRepo: s.customSearchRepo,
@@ -44,6 +48,12 @@ func (s *service) withPrefixCommand(cmd []string) DokkoiCmd {
 			scoreRepo: s.scoreRepo,
 			user:      user,
 			operator:  noOperator,
+		}
+	case len(cmd) >= 3 && cmd[1] == "select":
+		joined := strings.Join(cmd[2:], "")
+		elements := strings.Split(joined, ",")
+		return &selectCmd{
+			elements: elements,
 		}
 	default:
 		return nil

@@ -13,7 +13,8 @@ dokkoi echo <text> - Reply back with <text>
 dokkoi help - Displays all of the help commands that this bot knows about.
 dokkoi help <query> - Displays all help commands that match <query>.
 dokkoi image <query> - Queries Google Images for <query> and returns a top result.
-dokkoi score <name> - Display the score for a name.`
+dokkoi score <name> - Display the score for a name.
+dokkoi select <element1>,<element2>,... - Choose one of the elements in your list randomly.`
 
 	tests := map[string]struct {
 		target   string
