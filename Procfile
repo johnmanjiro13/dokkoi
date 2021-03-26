@@ -1,1 +1,1 @@
-worker: bin/dokkoi
+worker: bin/dokkoi -s inmem
