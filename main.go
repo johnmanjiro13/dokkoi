@@ -89,5 +89,7 @@ func main() {
 
 	// close connections clearly
 	dg.Close()
-	redisCli.Close()
+	if redisCli != nil {
+		redisCli.Close()
+	}
 }
