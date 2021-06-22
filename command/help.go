@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"sort"
 	"strings"
 )
@@ -19,7 +20,7 @@ var descriptions = map[string]string{
 	"--":     "<name>-- - Decrement score for a name",
 }
 
-func (c *helpCmd) Exec() (desc string, err error) {
+func (c *helpCmd) Exec(ctx context.Context) (desc string, err error) {
 	if c.target == "" {
 		desc = strings.Join(values(descriptions), "\n")
 	} else {

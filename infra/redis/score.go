@@ -1,10 +1,11 @@
 package redis
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	pkgerrors "github.com/pkg/errors"
 
 	"github.com/johnmanjiro13/dokkoi/command"
@@ -19,8 +20,8 @@ func NewScoreRepository(cli *redis.Client) command.ScoreRepository {
 	return &scoreRepository{cli: cli}
 }
 
-func (r *scoreRepository) Incr(username string) (int64, error) {
-	score, err := r.cli.Incr(fmt.Sprintf("score:%s", username)).Result()
+func (r *scoreRepository) Incr(ctx context.Context, username string) (int64, error) {
+	score, err := r.cli.Incr(ctx, fmt.Sprintf("score:%s", username)).Result()
 	if err != nil {
 		return 0, pkgerrors.Wrap(err, "incr score failed")
 	}
@@ -28,8 +29,8 @@ func (r *scoreRepository) Incr(username string) (int64, error) {
 	return score, nil
 }
 
-func (r *scoreRepository) Decr(username string) (int64, error) {
-	score, err := r.cli.Decr(fmt.Sprintf("score:%s", username)).Result()
+func (r *scoreRepository) Decr(ctx context.Context, username string) (int64, error) {
+	score, err := r.cli.Decr(ctx, fmt.Sprintf("score:%s", username)).Result()
 	if err != nil {
 		return 0, pkgerrors.Wrap(err, "decr score failed")
 	}
@@ -37,8 +38,8 @@ func (r *scoreRepository) Decr(username string) (int64, error) {
 	return score, nil
 }
 
-func (r *scoreRepository) UserScore(username string) (int64, error) {
-	value, err := r.cli.Get(fmt.Sprintf("score:%s", username)).Result()
+func (r *scoreRepository) UserScore(ctx context.Context, username string) (int64, error) {
+	value, err := r.cli.Get(ctx, fmt.Sprintf("score:%s", username)).Result()
 	if pkgerrors.Is(err, redis.Nil) {
 		// user does not exist
 		return 0, nil

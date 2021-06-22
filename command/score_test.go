@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -61,17 +62,17 @@ func TestScoreCmd_Exec(t *testing.T) {
 			switch tt.operator {
 			case incrOperator:
 				if tt.user != "" {
-					mockScoreRepo.EXPECT().Incr(tt.user).Return(tt.score, nil)
+					mockScoreRepo.EXPECT().Incr(gomock.Any(), tt.user).Return(tt.score, nil)
 				} else {
 					mockScoreRepo.EXPECT().LastUsername().Return(tt.lastUser)
-					mockScoreRepo.EXPECT().Incr(tt.lastUser).Return(tt.score, nil)
+					mockScoreRepo.EXPECT().Incr(gomock.Any(), tt.lastUser).Return(tt.score, nil)
 				}
 			case decrOperator:
-				mockScoreRepo.EXPECT().Decr(tt.user).Return(tt.score, nil)
+				mockScoreRepo.EXPECT().Decr(gomock.Any(), tt.user).Return(tt.score, nil)
 			case noOperator:
-				mockScoreRepo.EXPECT().UserScore(tt.user).Return(tt.score, nil)
+				mockScoreRepo.EXPECT().UserScore(gomock.Any(), tt.user).Return(tt.score, nil)
 			}
-			actual, err := cmd.Exec()
+			actual, err := cmd.Exec(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -107,11 +108,11 @@ func TestScoreCmd_CalcScore(t *testing.T) {
 				operator:  tt.operator,
 			}
 			if tt.operator == incrOperator {
-				mockScoreRepo.EXPECT().Incr(tt.user)
+				mockScoreRepo.EXPECT().Incr(gomock.Any(), tt.user)
 			} else if tt.operator == decrOperator {
-				mockScoreRepo.EXPECT().Decr(tt.user)
+				mockScoreRepo.EXPECT().Decr(gomock.Any(), tt.user)
 			}
-			cmd.calcScore()
+			cmd.calcScore(context.Background())
 		})
 	}
 }

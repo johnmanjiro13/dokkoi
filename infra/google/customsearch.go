@@ -1,6 +1,7 @@
 package google
 
 import (
+	"context"
 	"math/rand"
 
 	"github.com/spf13/viper"
@@ -31,8 +32,8 @@ func NewCustomSearchRepository(service *customsearch.Service, engineID string) c
 	}
 }
 
-func (r *customSearchRepository) SearchImage(query string) (*customsearch.Result, error) {
-	search := r.svc.Cse.List().Cx(r.engineID).
+func (r *customSearchRepository) SearchImage(ctx context.Context, query string) (*customsearch.Result, error) {
+	search := r.svc.Cse.List().Context(ctx).Cx(r.engineID).
 		SearchType("image").
 		Num(imageNum).
 		Q(query).

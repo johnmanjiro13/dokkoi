@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"math/rand"
 	"testing"
 	"time"
@@ -15,7 +16,7 @@ func TestSelectCmd_Exec(t *testing.T) {
 	}
 	var cnt1, cnt2, cnt3 int
 	for i := 0; i < 5000; i++ {
-		res, err := cmd.Exec()
+		res, err := cmd.Exec(context.Background())
 		if err != nil {
 			t.Fatal(err)
 		}

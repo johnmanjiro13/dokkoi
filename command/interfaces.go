@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"errors"
 
 	"google.golang.org/api/customsearch/v1"
@@ -9,7 +10,7 @@ import (
 var ErrImageNotFound = errors.New("image was not found.")
 
 type DokkoiCmd interface {
-	Exec() (string, error)
+	Exec(ctx context.Context) (string, error)
 }
 
 type Service interface {
@@ -17,12 +18,12 @@ type Service interface {
 }
 
 type CustomSearchRepository interface {
-	SearchImage(query string) (*customsearch.Result, error)
+	SearchImage(ctx context.Context, query string) (*customsearch.Result, error)
 }
 
 type ScoreRepository interface {
 	LastUsername() string
-	Incr(username string) (int64, error)
-	Decr(username string) (int64, error)
-	UserScore(username string) (int64, error)
+	Incr(ctx context.Context, username string) (int64, error)
+	Decr(ctx context.Context, username string) (int64, error)
+	UserScore(ctx context.Context, username string) (int64, error)
 }
