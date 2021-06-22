@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: gomod
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "20:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: google.golang.org/api
+    versions:
+    - 0.40.0
+    - 0.42.0
+  - dependency-name: github.com/spf13/pflag
+    versions:
+    - 1.0.5
+  - dependency-name: github.com/bwmarrin/discordgo
+    versions:
+    - 0.23.2
