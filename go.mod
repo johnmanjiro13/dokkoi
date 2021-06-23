@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go v0.76.0 // indirect
 	github.com/bwmarrin/discordgo v0.23.2
 	github.com/go-redis/redis/v8 v8.10.0
-	github.com/golang/mock v1.5.0
+	github.com/golang/mock v1.6.0
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/pelletier/go-toml v1.8.1 // indirect
