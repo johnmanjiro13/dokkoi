@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -33,7 +34,7 @@ dokkoi select <element1>,<element2>,... - Choose one of the elements in your lis
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			cmd := &helpCmd{target: tt.target}
-			actual, err := cmd.Exec()
+			actual, err := cmd.Exec(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}

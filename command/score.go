@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -16,7 +17,7 @@ type scoreCmd struct {
 	operator  string
 }
 
-func (c *scoreCmd) Exec() (string, error) {
+func (c *scoreCmd) Exec(ctx context.Context) (string, error) {
 	if c.user == "" {
 		c.user = c.scoreRepo.LastUsername()
 	}
@@ -26,12 +27,12 @@ func (c *scoreCmd) Exec() (string, error) {
 		err   error
 	)
 	if c.operator == incrOperator || c.operator == decrOperator {
-		score, err = c.calcScore()
+		score, err = c.calcScore(ctx)
 		if err != nil {
 			return "", err
 		}
 	} else if c.operator == noOperator {
-		score, err = c.scoreRepo.UserScore(c.user)
+		score, err = c.scoreRepo.UserScore(ctx, c.user)
 		if err != nil {
 			return "", err
 		}
@@ -46,10 +47,10 @@ func (c *scoreCmd) Exec() (string, error) {
 	return message, nil
 }
 
-func (c *scoreCmd) calcScore() (int64, error) {
+func (c *scoreCmd) calcScore(ctx context.Context) (int64, error) {
 	if c.operator == incrOperator {
-		return c.scoreRepo.Incr(c.user)
+		return c.scoreRepo.Incr(ctx, c.user)
 	} else {
-		return c.scoreRepo.Decr(c.user)
+		return c.scoreRepo.Decr(ctx, c.user)
 	}
 }

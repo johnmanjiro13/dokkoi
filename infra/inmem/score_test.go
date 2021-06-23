@@ -1,6 +1,7 @@
 package inmem
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -29,7 +30,7 @@ func TestScoreRepository_Incr(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.Incr(tt.user)
+			actual, err := repo.Incr(context.Background(), tt.user)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -62,7 +63,7 @@ func TestScoreRepository_Decr(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.Decr(tt.user)
+			actual, err := repo.Decr(context.Background(), tt.user)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -75,9 +76,9 @@ func TestScoreRepository_Decr(t *testing.T) {
 func TestScoreRepository_LastUser(t *testing.T) {
 	scores := map[string]int64{}
 	repo := NewScoreRepository(scores)
-	repo.Incr("johnman")
+	repo.Incr(context.Background(), "johnman")
 	assert.Equal(t, "johnman", repo.LastUsername())
-	repo.Decr("god")
+	repo.Decr(context.Background(), "god")
 	assert.Equal(t, "god", repo.LastUsername())
 }
 
@@ -104,7 +105,7 @@ func TestScoreRepository_UserScore(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.UserScore(tt.user)
+			actual, err := repo.UserScore(context.Background(), tt.user)
 			if err != nil {
 				t.Fatal(err)
 			}

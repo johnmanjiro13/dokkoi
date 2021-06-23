@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -27,7 +28,7 @@ func (h *handler) onMessageCreate(s *discordgo.Session, m *discordgo.MessageCrea
 	if cmd == nil {
 		return
 	}
-	res, err := cmd.Exec()
+	res, err := cmd.Exec(context.Background())
 	if err != nil {
 		log.Printf("an error occurred in command execution. err: %+v", err)
 		return

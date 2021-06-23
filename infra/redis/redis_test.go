@@ -1,11 +1,12 @@
 package redis
 
 import (
+	"context"
 	"log"
 	"os"
 	"testing"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 )
 
@@ -24,7 +25,7 @@ func testMain(m *testing.M) int {
 		log.Fatal(err)
 	}
 	defer func() {
-		cli.FlushDB()
+		cli.FlushDB(context.Background())
 		if err := cli.Close(); err != nil {
 			log.Fatalf("failed to close connection: %v", err)
 		}
@@ -34,5 +35,5 @@ func testMain(m *testing.M) int {
 }
 
 func openTest() (*redis.Client, error) {
-	return Open(viper.GetString("redis.host"), viper.GetInt("redis.db"), viper.GetString("redis.password"))
+	return Open(context.Background(), viper.GetString("redis.host"), viper.GetInt("redis.db"), viper.GetString("redis.password"))
 }

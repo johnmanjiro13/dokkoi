@@ -5,6 +5,7 @@
 package mock_command
 
 import (
+	context "context"
 	gomock "github.com/golang/mock/gomock"
 	customsearch "google.golang.org/api/customsearch/v1"
 	reflect "reflect"
@@ -34,18 +35,18 @@ func (m *MockCustomSearchRepository) EXPECT() *MockCustomSearchRepositoryMockRec
 }
 
 // SearchImage mocks base method
-func (m *MockCustomSearchRepository) SearchImage(arg0 string) (*customsearch.Result, error) {
+func (m *MockCustomSearchRepository) SearchImage(arg0 context.Context, arg1 string) (*customsearch.Result, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SearchImage", arg0)
+	ret := m.ctrl.Call(m, "SearchImage", arg0, arg1)
 	ret0, _ := ret[0].(*customsearch.Result)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // SearchImage indicates an expected call of SearchImage
-func (mr *MockCustomSearchRepositoryMockRecorder) SearchImage(arg0 interface{}) *gomock.Call {
+func (mr *MockCustomSearchRepositoryMockRecorder) SearchImage(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchImage", reflect.TypeOf((*MockCustomSearchRepository)(nil).SearchImage), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchImage", reflect.TypeOf((*MockCustomSearchRepository)(nil).SearchImage), arg0, arg1)
 }
 
 // MockScoreRepository is a mock of ScoreRepository interface
@@ -72,33 +73,33 @@ func (m *MockScoreRepository) EXPECT() *MockScoreRepositoryMockRecorder {
 }
 
 // Decr mocks base method
-func (m *MockScoreRepository) Decr(arg0 string) (int64, error) {
+func (m *MockScoreRepository) Decr(arg0 context.Context, arg1 string) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Decr", arg0)
+	ret := m.ctrl.Call(m, "Decr", arg0, arg1)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Decr indicates an expected call of Decr
-func (mr *MockScoreRepositoryMockRecorder) Decr(arg0 interface{}) *gomock.Call {
+func (mr *MockScoreRepositoryMockRecorder) Decr(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decr", reflect.TypeOf((*MockScoreRepository)(nil).Decr), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decr", reflect.TypeOf((*MockScoreRepository)(nil).Decr), arg0, arg1)
 }
 
 // Incr mocks base method
-func (m *MockScoreRepository) Incr(arg0 string) (int64, error) {
+func (m *MockScoreRepository) Incr(arg0 context.Context, arg1 string) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Incr", arg0)
+	ret := m.ctrl.Call(m, "Incr", arg0, arg1)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Incr indicates an expected call of Incr
-func (mr *MockScoreRepositoryMockRecorder) Incr(arg0 interface{}) *gomock.Call {
+func (mr *MockScoreRepositoryMockRecorder) Incr(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Incr", reflect.TypeOf((*MockScoreRepository)(nil).Incr), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Incr", reflect.TypeOf((*MockScoreRepository)(nil).Incr), arg0, arg1)
 }
 
 // LastUsername mocks base method
@@ -116,16 +117,16 @@ func (mr *MockScoreRepositoryMockRecorder) LastUsername() *gomock.Call {
 }
 
 // UserScore mocks base method
-func (m *MockScoreRepository) UserScore(arg0 string) (int64, error) {
+func (m *MockScoreRepository) UserScore(arg0 context.Context, arg1 string) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UserScore", arg0)
+	ret := m.ctrl.Call(m, "UserScore", arg0, arg1)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // UserScore indicates an expected call of UserScore
-func (mr *MockScoreRepositoryMockRecorder) UserScore(arg0 interface{}) *gomock.Call {
+func (mr *MockScoreRepositoryMockRecorder) UserScore(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserScore", reflect.TypeOf((*MockScoreRepository)(nil).UserScore), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserScore", reflect.TypeOf((*MockScoreRepository)(nil).UserScore), arg0, arg1)
 }

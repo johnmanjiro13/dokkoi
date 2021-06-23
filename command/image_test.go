@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -37,12 +38,12 @@ func TestImageCmd_Exec(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			mockCustomSearchRepo.EXPECT().SearchImage(tt.query).Return(tt.image, tt.err)
+			mockCustomSearchRepo.EXPECT().SearchImage(gomock.Any(), tt.query).Return(tt.image, tt.err)
 			cmd := &imageCmd{
 				customSearchRepo: mockCustomSearchRepo,
 				query:            tt.query,
 			}
-			actual, err := cmd.Exec()
+			actual, err := cmd.Exec(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -70,12 +71,12 @@ func TestImageCmd_searchImage(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			mockCustomSearchRepo.EXPECT().SearchImage(tt.query).Return(tt.image, nil)
+			mockCustomSearchRepo.EXPECT().SearchImage(gomock.Any(), tt.query).Return(tt.image, nil)
 			cmd := &imageCmd{
 				customSearchRepo: mockCustomSearchRepo,
 				query:            tt.query,
 			}
-			actual, err := cmd.searchImage()
+			actual, err := cmd.searchImage(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}

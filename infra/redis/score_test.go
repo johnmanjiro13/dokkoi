@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -13,11 +14,12 @@ func TestScoreRepository_Incr(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cli.Close()
-	status := cli.Set("score:johnman", 1, 5*time.Minute)
+	ctx := context.Background()
+	status := cli.Set(ctx, "score:johnman", 1, 5*time.Minute)
 	if status.Err() != nil {
 		t.Fatal(status.Err())
 	}
-	defer cli.FlushDB()
+	defer cli.FlushDB(ctx)
 	repo := NewScoreRepository(cli)
 
 	tests := map[string]struct {
@@ -36,7 +38,7 @@ func TestScoreRepository_Incr(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.Incr(tt.username)
+			actual, err := repo.Incr(ctx, tt.username)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -52,11 +54,12 @@ func TestScoreRepository_Decr(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cli.Close()
-	status := cli.Set("score:johnman", 1, 5*time.Minute)
+	ctx := context.Background()
+	status := cli.Set(ctx, "score:johnman", 1, 5*time.Minute)
 	if status.Err() != nil {
 		t.Fatal(status.Err())
 	}
-	defer cli.FlushDB()
+	defer cli.FlushDB(ctx)
 	repo := NewScoreRepository(cli)
 
 	tests := map[string]struct {
@@ -75,7 +78,7 @@ func TestScoreRepository_Decr(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.Decr(tt.username)
+			actual, err := repo.Decr(ctx, tt.username)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -86,19 +89,19 @@ func TestScoreRepository_Decr(t *testing.T) {
 }
 
 func TestScoreRepository_LastUser(t *testing.T) {
+	ctx := context.Background()
 	cli, err := openTest()
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer cli.Close()
-	defer cli.FlushDB()
-
+	defer cli.FlushDB(ctx)
 	repo := NewScoreRepository(cli)
-	if _, err := repo.Incr("johnman"); err != nil {
+	if _, err := repo.Incr(ctx, "johnman"); err != nil {
 		t.Fatal(err)
 	}
 	assert.Equal(t, "johnman", repo.LastUsername())
-	if _, err := repo.Decr("god"); err != nil {
+	if _, err := repo.Decr(ctx, "god"); err != nil {
 		t.Fatal(err)
 	}
 	assert.Equal(t, "god", repo.LastUsername())
@@ -110,11 +113,13 @@ func TestScoreRepository_UserScore(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cli.Close()
-	status := cli.Set("score:johnman", 1, 5*time.Minute)
+
+	ctx := context.Background()
+	status := cli.Set(ctx, "score:johnman", 1, 5*time.Minute)
 	if status.Err() != nil {
 		t.Fatal(status.Err())
 	}
-	defer cli.FlushDB()
+	defer cli.FlushDB(ctx)
 	repo := NewScoreRepository(cli)
 
 	tests := map[string]struct {
@@ -133,7 +138,7 @@ func TestScoreRepository_UserScore(t *testing.T) {
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual, err := repo.UserScore(tt.user)
+			actual, err := repo.UserScore(ctx, tt.user)
 			if err != nil {
 				t.Fatal(err)
 			}

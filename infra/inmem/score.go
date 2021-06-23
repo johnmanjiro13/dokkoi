@@ -1,6 +1,10 @@
 package inmem
 
-import "github.com/johnmanjiro13/dokkoi/command"
+import (
+	"context"
+
+	"github.com/johnmanjiro13/dokkoi/command"
+)
 
 type scoreRepository struct {
 	scores       map[string]int64
@@ -17,7 +21,7 @@ func (r *scoreRepository) LastUsername() string {
 	return r.lastUsername
 }
 
-func (r *scoreRepository) Incr(username string) (int64, error) {
+func (r *scoreRepository) Incr(ctx context.Context, username string) (int64, error) {
 	score := r.scores[username]
 	score++
 	r.scores[username] = score
@@ -25,7 +29,7 @@ func (r *scoreRepository) Incr(username string) (int64, error) {
 	return score, nil
 }
 
-func (r *scoreRepository) Decr(user string) (int64, error) {
+func (r *scoreRepository) Decr(ctx context.Context, user string) (int64, error) {
 	score := r.scores[user]
 	score--
 	r.scores[user] = score
@@ -33,6 +37,6 @@ func (r *scoreRepository) Decr(user string) (int64, error) {
 	return score, nil
 }
 
-func (r *scoreRepository) UserScore(user string) (int64, error) {
+func (r *scoreRepository) UserScore(ctx context.Context, user string) (int64, error) {
 	return r.scores[user], nil
 }

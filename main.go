@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	goredis "github.com/go-redis/redis"
+	goredis "github.com/go-redis/redis/v8"
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"google.golang.org/api/customsearch/v1"
@@ -60,7 +60,7 @@ func main() {
 	case "inmem":
 		scoreRepo = inmem.NewScoreRepository(map[string]int64{})
 	case "redis":
-		redisCli, err = redis.Open(viper.GetString("redis.host"), viper.GetInt("redis.db"), viper.GetString("redis.password"))
+		redisCli, err = redis.Open(context.Background(), viper.GetString("redis.host"), viper.GetInt("redis.db"), viper.GetString("redis.password"))
 		if err != nil {
 			log.Fatalf("connecting redis is fail. err: %v", err)
 		}
