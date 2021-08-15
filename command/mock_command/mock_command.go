@@ -6,35 +6,52 @@ package mock_command
 
 import (
 	context "context"
+	io "io"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	customsearch "google.golang.org/api/customsearch/v1"
-	reflect "reflect"
 )
 
-// MockCustomSearchRepository is a mock of CustomSearchRepository interface
+// MockCustomSearchRepository is a mock of CustomSearchRepository interface.
 type MockCustomSearchRepository struct {
 	ctrl     *gomock.Controller
 	recorder *MockCustomSearchRepositoryMockRecorder
 }
 
-// MockCustomSearchRepositoryMockRecorder is the mock recorder for MockCustomSearchRepository
+// MockCustomSearchRepositoryMockRecorder is the mock recorder for MockCustomSearchRepository.
 type MockCustomSearchRepositoryMockRecorder struct {
 	mock *MockCustomSearchRepository
 }
 
-// NewMockCustomSearchRepository creates a new mock instance
+// NewMockCustomSearchRepository creates a new mock instance.
 func NewMockCustomSearchRepository(ctrl *gomock.Controller) *MockCustomSearchRepository {
 	mock := &MockCustomSearchRepository{ctrl: ctrl}
 	mock.recorder = &MockCustomSearchRepositoryMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockCustomSearchRepository) EXPECT() *MockCustomSearchRepositoryMockRecorder {
 	return m.recorder
 }
 
-// SearchImage mocks base method
+// LGTM mocks base method.
+func (m *MockCustomSearchRepository) LGTM(arg0 context.Context, arg1 string) (io.Reader, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LGTM", arg0, arg1)
+	ret0, _ := ret[0].(io.Reader)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LGTM indicates an expected call of LGTM.
+func (mr *MockCustomSearchRepositoryMockRecorder) LGTM(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LGTM", reflect.TypeOf((*MockCustomSearchRepository)(nil).LGTM), arg0, arg1)
+}
+
+// SearchImage mocks base method.
 func (m *MockCustomSearchRepository) SearchImage(arg0 context.Context, arg1 string) (*customsearch.Result, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchImage", arg0, arg1)
@@ -43,36 +60,36 @@ func (m *MockCustomSearchRepository) SearchImage(arg0 context.Context, arg1 stri
 	return ret0, ret1
 }
 
-// SearchImage indicates an expected call of SearchImage
+// SearchImage indicates an expected call of SearchImage.
 func (mr *MockCustomSearchRepositoryMockRecorder) SearchImage(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchImage", reflect.TypeOf((*MockCustomSearchRepository)(nil).SearchImage), arg0, arg1)
 }
 
-// MockScoreRepository is a mock of ScoreRepository interface
+// MockScoreRepository is a mock of ScoreRepository interface.
 type MockScoreRepository struct {
 	ctrl     *gomock.Controller
 	recorder *MockScoreRepositoryMockRecorder
 }
 
-// MockScoreRepositoryMockRecorder is the mock recorder for MockScoreRepository
+// MockScoreRepositoryMockRecorder is the mock recorder for MockScoreRepository.
 type MockScoreRepositoryMockRecorder struct {
 	mock *MockScoreRepository
 }
 
-// NewMockScoreRepository creates a new mock instance
+// NewMockScoreRepository creates a new mock instance.
 func NewMockScoreRepository(ctrl *gomock.Controller) *MockScoreRepository {
 	mock := &MockScoreRepository{ctrl: ctrl}
 	mock.recorder = &MockScoreRepositoryMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockScoreRepository) EXPECT() *MockScoreRepositoryMockRecorder {
 	return m.recorder
 }
 
-// Decr mocks base method
+// Decr mocks base method.
 func (m *MockScoreRepository) Decr(arg0 context.Context, arg1 string) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Decr", arg0, arg1)
@@ -81,13 +98,13 @@ func (m *MockScoreRepository) Decr(arg0 context.Context, arg1 string) (int64, er
 	return ret0, ret1
 }
 
-// Decr indicates an expected call of Decr
+// Decr indicates an expected call of Decr.
 func (mr *MockScoreRepositoryMockRecorder) Decr(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decr", reflect.TypeOf((*MockScoreRepository)(nil).Decr), arg0, arg1)
 }
 
-// Incr mocks base method
+// Incr mocks base method.
 func (m *MockScoreRepository) Incr(arg0 context.Context, arg1 string) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Incr", arg0, arg1)
@@ -96,13 +113,13 @@ func (m *MockScoreRepository) Incr(arg0 context.Context, arg1 string) (int64, er
 	return ret0, ret1
 }
 
-// Incr indicates an expected call of Incr
+// Incr indicates an expected call of Incr.
 func (mr *MockScoreRepositoryMockRecorder) Incr(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Incr", reflect.TypeOf((*MockScoreRepository)(nil).Incr), arg0, arg1)
 }
 
-// LastUsername mocks base method
+// LastUsername mocks base method.
 func (m *MockScoreRepository) LastUsername() string {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LastUsername")
@@ -110,13 +127,13 @@ func (m *MockScoreRepository) LastUsername() string {
 	return ret0
 }
 
-// LastUsername indicates an expected call of LastUsername
+// LastUsername indicates an expected call of LastUsername.
 func (mr *MockScoreRepositoryMockRecorder) LastUsername() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LastUsername", reflect.TypeOf((*MockScoreRepository)(nil).LastUsername))
 }
 
-// UserScore mocks base method
+// UserScore mocks base method.
 func (m *MockScoreRepository) UserScore(arg0 context.Context, arg1 string) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserScore", arg0, arg1)
@@ -125,7 +142,7 @@ func (m *MockScoreRepository) UserScore(arg0 context.Context, arg1 string) (int6
 	return ret0, ret1
 }
 
-// UserScore indicates an expected call of UserScore
+// UserScore indicates an expected call of UserScore.
 func (mr *MockScoreRepositoryMockRecorder) UserScore(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserScore", reflect.TypeOf((*MockScoreRepository)(nil).UserScore), arg0, arg1)

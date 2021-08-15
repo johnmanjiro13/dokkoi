@@ -12,6 +12,7 @@ const (
 )
 
 type scoreCmd struct {
+	noExecFileCmd
 	scoreRepo ScoreRepository
 	user      string
 	operator  string

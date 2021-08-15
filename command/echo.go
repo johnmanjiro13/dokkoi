@@ -3,6 +3,7 @@ package command
 import "context"
 
 type echoCmd struct {
+	noExecFileCmd
 	message string
 }
 

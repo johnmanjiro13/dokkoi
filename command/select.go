@@ -6,6 +6,7 @@ import (
 )
 
 type selectCmd struct {
+	noExecFileCmd
 	elements []string
 }
 

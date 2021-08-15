@@ -7,6 +7,7 @@ import (
 )
 
 type imageCmd struct {
+	noExecFileCmd
 	customSearchRepo CustomSearchRepository
 	query            string
 }

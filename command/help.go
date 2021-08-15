@@ -7,6 +7,7 @@ import (
 )
 
 type helpCmd struct {
+	noExecFileCmd
 	target string
 }
 
