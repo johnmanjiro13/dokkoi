@@ -11,7 +11,7 @@ type imageCmd struct {
 	query            string
 }
 
-func (c *imageCmd) Exec(ctx context.Context) (string, error) {
+func (c *imageCmd) ExecString(ctx context.Context) (string, error) {
 	url, err := c.searchImage(ctx)
 	if err != nil {
 		if pkgerrors.Is(err, ErrImageNotFound) {

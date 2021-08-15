@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHelpCmd_Exec(t *testing.T) {
+func TestHelpCmd_ExecString(t *testing.T) {
 	fullDesc := `<name>++ - Increment score for a name
 <name>-- - Decrement score for a name
 dokkoi echo <text> - Reply back with <text>
@@ -34,7 +34,7 @@ dokkoi select <element1>,<element2>,... - Choose one of the elements in your lis
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			cmd := &helpCmd{target: tt.target}
-			actual, err := cmd.Exec(context.Background())
+			actual, err := cmd.ExecString(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}

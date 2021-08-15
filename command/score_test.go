@@ -10,7 +10,7 @@ import (
 	"github.com/johnmanjiro13/dokkoi/command/mock_command"
 )
 
-func TestScoreCmd_Exec(t *testing.T) {
+func TestScoreCmd_ExecString(t *testing.T) {
 	tests := map[string]struct {
 		user     string
 		lastUser string
@@ -72,7 +72,7 @@ func TestScoreCmd_Exec(t *testing.T) {
 			case noOperator:
 				mockScoreRepo.EXPECT().UserScore(gomock.Any(), tt.user).Return(tt.score, nil)
 			}
-			actual, err := cmd.Exec(context.Background())
+			actual, err := cmd.ExecString(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}

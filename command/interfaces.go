@@ -10,7 +10,7 @@ import (
 var ErrImageNotFound = errors.New("image was not found.")
 
 type DokkoiCmd interface {
-	Exec(ctx context.Context) (string, error)
+	ExecString(ctx context.Context) (string, error)
 	SendType() string
 }
 

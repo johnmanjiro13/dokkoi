@@ -37,7 +37,7 @@ func (h *handler) onMessageCreate(s *discordgo.Session, m *discordgo.MessageCrea
 }
 
 func sendMessage(s *discordgo.Session, channelID string, cmd command.DokkoiCmd) error {
-	res, err := cmd.Exec(context.Background())
+	res, err := cmd.ExecString(context.Background())
 	if err != nil {
 		return fmt.Errorf("an error occurred in command execution. err: %+v", err)
 	}

@@ -17,7 +17,7 @@ type scoreCmd struct {
 	operator  string
 }
 
-func (c *scoreCmd) Exec(ctx context.Context) (string, error) {
+func (c *scoreCmd) ExecString(ctx context.Context) (string, error) {
 	if c.user == "" {
 		c.user = c.scoreRepo.LastUsername()
 	}

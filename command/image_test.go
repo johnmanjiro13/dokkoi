@@ -11,7 +11,7 @@ import (
 	"github.com/johnmanjiro13/dokkoi/command/mock_command"
 )
 
-func TestImageCmd_Exec(t *testing.T) {
+func TestImageCmd_ExecString(t *testing.T) {
 	tests := map[string]struct {
 		query    string
 		image    *customsearch.Result
@@ -43,7 +43,7 @@ func TestImageCmd_Exec(t *testing.T) {
 				customSearchRepo: mockCustomSearchRepo,
 				query:            tt.query,
 			}
-			actual, err := cmd.Exec(context.Background())
+			actual, err := cmd.ExecString(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}
