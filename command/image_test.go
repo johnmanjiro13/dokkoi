@@ -84,3 +84,8 @@ func TestImageCmd_searchImage(t *testing.T) {
 		})
 	}
 }
+
+func TestImageCmd_SendType(t *testing.T) {
+	cmd := &imageCmd{}
+	assert.Equal(t, "Message", cmd.SendType())
+}

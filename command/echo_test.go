@@ -16,3 +16,8 @@ func TestEchoCmd_Exec(t *testing.T) {
 	}
 	assert.Equal(t, expected, actual)
 }
+
+func TestEchoCmd_SendType(t *testing.T) {
+	cmd := &echoCmd{}
+	assert.Equal(t, "Message", cmd.SendType())
+}

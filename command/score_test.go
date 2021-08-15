@@ -116,3 +116,8 @@ func TestScoreCmd_CalcScore(t *testing.T) {
 		})
 	}
 }
+
+func TestScoreCmd_SendType(t *testing.T) {
+	cmd := &scoreCmd{}
+	assert.Equal(t, "Message", cmd.SendType())
+}

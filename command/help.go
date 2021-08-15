@@ -29,6 +29,10 @@ func (c *helpCmd) Exec(ctx context.Context) (desc string, err error) {
 	return
 }
 
+func (c *helpCmd) SendType() string {
+	return "Message"
+}
+
 func values(m map[string]string) (s []string) {
 	for _, v := range m {
 		s = append(s, v)

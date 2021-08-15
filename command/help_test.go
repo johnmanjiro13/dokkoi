@@ -43,6 +43,11 @@ dokkoi select <element1>,<element2>,... - Choose one of the elements in your lis
 	}
 }
 
+func TestHElpCmd_SendType(t *testing.T) {
+	cmd := &helpCmd{}
+	assert.Equal(t, "Message", cmd.SendType())
+}
+
 func TestValues(t *testing.T) {
 	fixture := map[string]string{
 		"++": "<name>++ - Increment score for a name",

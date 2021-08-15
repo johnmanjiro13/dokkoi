@@ -54,3 +54,7 @@ func (c *scoreCmd) calcScore(ctx context.Context) (int64, error) {
 		return c.scoreRepo.Decr(ctx, c.user)
 	}
 }
+
+func (c *scoreCmd) SendType() string {
+	return "Message"
+}

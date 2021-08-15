@@ -36,6 +36,11 @@ func TestSelectCmd_Exec(t *testing.T) {
 	assert.Equal(t, true, equalRoughly(cnt2, cnt3))
 }
 
+func TestSelectCmd_SendType(t *testing.T) {
+	cmd := &selectCmd{}
+	assert.Equal(t, "Message", cmd.SendType())
+}
+
 func equalRoughly(a, b int) bool {
 	acceptRange := 0.08
 	return int(float64(a)*(1-acceptRange)) < b && b < int(float64(a)*(1+acceptRange))

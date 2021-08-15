@@ -29,3 +29,7 @@ func (c *imageCmd) searchImage(ctx context.Context) (string, error) {
 	}
 	return image.Link, nil
 }
+
+func (c *imageCmd) SendType() string {
+	return "Message"
+}
