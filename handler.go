@@ -56,6 +56,9 @@ func sendFile(s *discordgo.Session, channelID string, cmd command.DokkoiCmd) err
 	if err != nil {
 		return fmt.Errorf("an error occurred in file command execution. err: %+v", err)
 	}
+	if res == nil {
+		return fmt.Errorf("result is not found.")
+	}
 	if _, err := s.ChannelFileSend(channelID, "lgtm.jpg", res); err != nil {
 		return fmt.Errorf("an error occurred in sending file. err: %+v", err)
 	}
