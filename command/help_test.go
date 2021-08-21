@@ -7,13 +7,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHelpCmd_Exec(t *testing.T) {
+func TestHelpCmd_ExecString(t *testing.T) {
 	fullDesc := `<name>++ - Increment score for a name
 <name>-- - Decrement score for a name
 dokkoi echo <text> - Reply back with <text>
 dokkoi help - Displays all of the help commands that this bot knows about.
 dokkoi help <query> - Displays all help commands that match <query>.
 dokkoi image <query> - Queries Google Images for <query> and returns a top result.
+dokkoi lgtm <query> - Queries Google Images for <query> and returns a top result with LGTM text.
 dokkoi score <name> - Display the score for a name.
 dokkoi select <element1>,<element2>,... - Choose one of the elements in your list randomly.`
 
@@ -34,13 +35,18 @@ dokkoi select <element1>,<element2>,... - Choose one of the elements in your lis
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			cmd := &helpCmd{target: tt.target}
-			actual, err := cmd.Exec(context.Background())
+			actual, err := cmd.ExecString(context.Background())
 			if err != nil {
 				t.Fatal(err)
 			}
 			assert.Equal(t, tt.expected, actual)
 		})
 	}
+}
+
+func TestHElpCmd_SendType(t *testing.T) {
+	cmd := &helpCmd{}
+	assert.Equal(t, "Message", cmd.SendType())
 }
 
 func TestValues(t *testing.T) {

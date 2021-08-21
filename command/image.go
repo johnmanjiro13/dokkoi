@@ -7,11 +7,12 @@ import (
 )
 
 type imageCmd struct {
+	noExecFileCmd
 	customSearchRepo CustomSearchRepository
 	query            string
 }
 
-func (c *imageCmd) Exec(ctx context.Context) (string, error) {
+func (c *imageCmd) ExecString(ctx context.Context) (string, error) {
 	url, err := c.searchImage(ctx)
 	if err != nil {
 		if pkgerrors.Is(err, ErrImageNotFound) {
@@ -28,4 +29,8 @@ func (c *imageCmd) searchImage(ctx context.Context) (string, error) {
 		return "", pkgerrors.Wrap(err, "image search failed")
 	}
 	return image.Link, nil
+}
+
+func (c *imageCmd) SendType() string {
+	return "Message"
 }

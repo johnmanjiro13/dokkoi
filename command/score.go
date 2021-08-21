@@ -12,12 +12,13 @@ const (
 )
 
 type scoreCmd struct {
+	noExecFileCmd
 	scoreRepo ScoreRepository
 	user      string
 	operator  string
 }
 
-func (c *scoreCmd) Exec(ctx context.Context) (string, error) {
+func (c *scoreCmd) ExecString(ctx context.Context) (string, error) {
 	if c.user == "" {
 		c.user = c.scoreRepo.LastUsername()
 	}
@@ -53,4 +54,8 @@ func (c *scoreCmd) calcScore(ctx context.Context) (int64, error) {
 	} else {
 		return c.scoreRepo.Decr(ctx, c.user)
 	}
+}
+
+func (c *scoreCmd) SendType() string {
+	return "Message"
 }

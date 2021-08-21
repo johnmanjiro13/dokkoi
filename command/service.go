@@ -42,6 +42,11 @@ func (s *service) withPrefixCommand(cmd []string) DokkoiCmd {
 			customSearchRepo: s.customSearchRepo,
 			query:            strings.Join(cmd[2:], " "),
 		}
+	case len(cmd) >= 3 && (cmd[1] == "lgtm" || cmd[1] == "LGTM"):
+		return &lgtmCmd{
+			customSearchRepo: s.customSearchRepo,
+			query:            strings.Join(cmd[2:], " "),
+		}
 	case len(cmd) >= 3 && cmd[1] == "score":
 		user := strings.Join(cmd[2:], "")
 		return &scoreCmd{

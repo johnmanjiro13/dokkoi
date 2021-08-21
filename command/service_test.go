@@ -34,6 +34,20 @@ func TestService_GetCommand(t *testing.T) {
 				query:            "z900rs",
 			},
 		},
+		"lgtm": {
+			content: "dokkoi lgtm mt-03",
+			expected: &lgtmCmd{
+				customSearchRepo: nil,
+				query:            "mt-03",
+			},
+		},
+		"LGTM": {
+			content: "dokkoi LGTM yzf-r25",
+			expected: &lgtmCmd{
+				customSearchRepo: nil,
+				query:            "yzf-r25",
+			},
+		},
 		"score incr": {
 			content: "John Doe++",
 			expected: &scoreCmd{

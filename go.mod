@@ -1,7 +1,7 @@
 module github.com/johnmanjiro13/dokkoi
 
-// +heroku goVersion go1.14
-go 1.14
+// +heroku goVersion go1.16
+go 1.16
 
 require (
 	github.com/bwmarrin/discordgo v0.23.2
@@ -13,5 +13,6 @@ require (
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
+	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d
 	google.golang.org/api v0.44.0
 )

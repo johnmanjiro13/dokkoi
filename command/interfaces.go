@@ -3,6 +3,7 @@ package command
 import (
 	"context"
 	"errors"
+	"io"
 
 	"google.golang.org/api/customsearch/v1"
 )
@@ -10,7 +11,21 @@ import (
 var ErrImageNotFound = errors.New("image was not found.")
 
 type DokkoiCmd interface {
-	Exec(ctx context.Context) (string, error)
+	ExecString(ctx context.Context) (string, error)
+	ExecFile(ctx context.Context) (io.Reader, error)
+	SendType() string
+}
+
+type noExecStringCmd struct{}
+
+func (c *noExecStringCmd) ExecString(ctx context.Context) (string, error) {
+	panic("not implemented")
+}
+
+type noExecFileCmd struct{}
+
+func (c *noExecFileCmd) ExecFile(ctx context.Context) (io.Reader, error) {
+	panic("not implemented")
 }
 
 type Service interface {
@@ -19,6 +34,7 @@ type Service interface {
 
 type CustomSearchRepository interface {
 	SearchImage(ctx context.Context, query string) (*customsearch.Result, error)
+	LGTM(ctx context.Context, query string) (io.Reader, error)
 }
 
 type ScoreRepository interface {
