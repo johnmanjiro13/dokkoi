@@ -1,5 +1,5 @@
 # dokkoi
-![](https://github.com/johnmanjiro13/dokkoi/workflows/test%20and%20build/badge.svg?branch=master)
+![](https://github.com/johnmanjiro13/dokkoi/workflows/test%20and%20build/badge.svg?branch=main)
 
 dokkoi is a friendly discord bot.
 
