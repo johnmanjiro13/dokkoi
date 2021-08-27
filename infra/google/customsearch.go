@@ -124,7 +124,21 @@ func drawStringToImage(img image.Image, text string) (*image.RGBA, error) {
 		return nil, fmt.Errorf("failed to create new face: %w", err)
 	}
 
+	x := img.Bounds().Dx() / 10 * 2
+	y := img.Bounds().Dy() / 5 * 3
+
 	d := &font.Drawer{
+		Dst:  dst,
+		Src:  image.NewUniform(color.RGBA{0, 0, 0, 255}),
+		Face: face,
+		Dot: fixed.Point26_6{
+			X: fixed.Int26_6((x + 1) * 64),
+			Y: fixed.Int26_6((y + 1) * 64),
+		},
+	}
+	d.DrawString(text)
+
+	d = &font.Drawer{
 		Dst:  dst,
 		Src:  image.NewUniform(color.RGBA{255, 255, 255, 255}),
 		Face: face,
