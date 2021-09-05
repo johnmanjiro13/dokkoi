@@ -1,7 +1,7 @@
 version: "3"
 services:
   dokkoi:
-    image: golang:1.16
+    image: golang:1.17
     working_dir: /dokkoi
     volumes:
       - .:/dokkoi
