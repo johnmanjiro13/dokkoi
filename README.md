@@ -5,7 +5,7 @@ dokkoi is a friendly discord bot.
 
 ## Installation
 ```
-$ go get github.com/johnmanjiro13/dokkoi
+$ go install github.com/johnmanjiro13/dokkoi
 ```
 
 ## Usage
