@@ -8,7 +8,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	pkgerrors "github.com/pkg/errors"
 
-	"github.com/johnmanjiro13/dokkoi/command"
+	"github.com/johnmanjiro13/dokkoi/pkg/command"
 )
 
 type scoreRepository struct {

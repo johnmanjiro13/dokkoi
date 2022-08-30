@@ -3,7 +3,7 @@ package inmem
 import (
 	"context"
 
-	"github.com/johnmanjiro13/dokkoi/command"
+	"github.com/johnmanjiro13/dokkoi/pkg/command"
 )
 
 type scoreRepository struct {

@@ -7,7 +7,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 
-	"github.com/johnmanjiro13/dokkoi/command"
+	"github.com/johnmanjiro13/dokkoi/pkg/command"
 )
 
 type handler struct {

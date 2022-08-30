@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/johnmanjiro13/dokkoi/command/mock_command"
+	"github.com/johnmanjiro13/dokkoi/pkg/command/mock_command"
 )
 
 func TestScoreCmd_ExecString(t *testing.T) {
