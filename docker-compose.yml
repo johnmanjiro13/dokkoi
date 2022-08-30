@@ -6,7 +6,7 @@ services:
     volumes:
       - .:/dokkoi
       - gomod_cache:/go
-    command: bash -c "go run main.go handler.go"
+    command: bash -c "go run ./cmd/dokkoi"
     environment:
       DISCORD_TOKEN: $DISCORD_TOKEN
       CUSTOMSEARCH_API_KEY: $CUSTOMSEARCH_API_KEY

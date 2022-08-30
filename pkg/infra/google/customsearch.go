@@ -18,7 +18,7 @@ import (
 	"golang.org/x/image/math/fixed"
 	"google.golang.org/api/customsearch/v1"
 
-	"github.com/johnmanjiro13/dokkoi/command"
+	"github.com/johnmanjiro13/dokkoi/pkg/command"
 
 	_ "embed"
 	_ "image/jpeg"

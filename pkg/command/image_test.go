@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/api/customsearch/v1"
 
-	"github.com/johnmanjiro13/dokkoi/command/mock_command"
+	"github.com/johnmanjiro13/dokkoi/pkg/command/mock_command"
 )
 
 func TestImageCmd_ExecString(t *testing.T) {

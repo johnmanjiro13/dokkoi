@@ -16,10 +16,10 @@ import (
 	"google.golang.org/api/customsearch/v1"
 	"google.golang.org/api/option"
 
-	"github.com/johnmanjiro13/dokkoi/command"
-	"github.com/johnmanjiro13/dokkoi/infra/google"
-	"github.com/johnmanjiro13/dokkoi/infra/inmem"
-	"github.com/johnmanjiro13/dokkoi/infra/redis"
+	"github.com/johnmanjiro13/dokkoi/pkg/command"
+	"github.com/johnmanjiro13/dokkoi/pkg/infra/google"
+	"github.com/johnmanjiro13/dokkoi/pkg/infra/inmem"
+	"github.com/johnmanjiro13/dokkoi/pkg/infra/redis"
 )
 
 func init() {

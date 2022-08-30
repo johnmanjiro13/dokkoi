@@ -7,8 +7,9 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/johnmanjiro13/dokkoi/command/mock_command"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/johnmanjiro13/dokkoi/pkg/command/mock_command"
 )
 
 func TestLGTMCommand_ExecFile(t *testing.T) {

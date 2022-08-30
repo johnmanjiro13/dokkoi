@@ -1,4 +1,5 @@
-dokkoi
-.DS_Store
 .idea
+
+/dokkoi
+.DS_Store
 .env
