@@ -8,10 +8,9 @@ services:
       - gomod_cache:/go
     command: bash -c "go run main.go handler.go"
     environment:
-      # set your environment variables
-      DISCORD_TOKEN: ""
-      CUSTOMSEARCH_API_KEY: ""
-      CUSTOMSEARCH_ENGINE_ID: ""
+      DISCORD_TOKEN: $DISCORD_TOKEN
+      CUSTOMSEARCH_API_KEY: $CUSTOMSEARCH_API_KEY
+      CUSTOMSEARCH_ENGINE_ID: $CUSTOMSEARCH_ENGINE_ID
     depends_on:
       - redis
   redis:
