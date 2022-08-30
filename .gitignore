@@ -1,5 +1,4 @@
 dokkoi
 .DS_Store
 .idea
-
-docker-compose.yml
+.env
