@@ -36,4 +36,4 @@ jobs:
       - name: test
         run: go test -race -cover ./...
       - name: build
-        run: go build .
+        run: go build ./cmd/dokkoi
