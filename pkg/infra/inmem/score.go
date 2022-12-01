@@ -2,11 +2,13 @@ package inmem
 
 import (
 	"context"
+	"sync"
 
 	"github.com/johnmanjiro13/dokkoi/pkg/command"
 )
 
 type scoreRepository struct {
+	mu           sync.Mutex
 	scores       map[string]int64
 	lastUsername string
 }
@@ -22,6 +24,8 @@ func (r *scoreRepository) LastUsername() string {
 }
 
 func (r *scoreRepository) Incr(ctx context.Context, username string) (int64, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	score := r.scores[username]
 	score++
 	r.scores[username] = score
@@ -30,6 +34,8 @@ func (r *scoreRepository) Incr(ctx context.Context, username string) (int64, err
 }
 
 func (r *scoreRepository) Decr(ctx context.Context, user string) (int64, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	score := r.scores[user]
 	score--
 	r.scores[user] = score
