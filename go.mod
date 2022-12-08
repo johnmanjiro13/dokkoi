@@ -1,7 +1,6 @@
 module github.com/johnmanjiro13/dokkoi
 
-// +heroku goVersion go1.16
-go 1.17
+go 1.19
 
 require (
 	github.com/bwmarrin/discordgo v0.23.2
