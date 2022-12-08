@@ -2,17 +2,21 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"math/rand"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/go-chi/chi"
 	goredis "github.com/go-redis/redis/v8"
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"golang.org/x/sync/errgroup"
 	"google.golang.org/api/customsearch/v1"
 	"google.golang.org/api/option"
 
@@ -69,6 +73,17 @@ func main() {
 		log.Fatalf("invalid type for score database: %s", *scoreDBType)
 	}
 
+	// setup healthcheck server
+	router := chi.NewRouter()
+	router.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
+		w.Write([]byte("pong"))
+	})
+	server := http.Server{
+		Addr:    fmt.Sprintf(":%d", 10000),
+		Handler: router,
+	}
+
 	// setup handler
 	cmdService := command.NewService(csRepo, scoreRepo)
 	handler := newHandler(cmdService)
@@ -77,19 +92,33 @@ func main() {
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
-	err = dg.Open()
-	if err != nil {
-		log.Fatalf("opening discord connection is fail. err: %v", err)
-	}
-
 	log.Print("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	defer close(sc)
+
+	var g errgroup.Group
+	g.Go(func() error {
+		if err := server.ListenAndServe(); err != nil {
+			return fmt.Errorf("failed to serve: %w", err)
+		}
+		return nil
+	})
+	g.Go(func() error {
+		if err := dg.Open(); err != nil {
+			return fmt.Errorf("opening discord connection is fail. err: %w", err)
+		}
+		return nil
+	})
+
 	<-sc
 
 	// close connections clearly
 	dg.Close()
 	if redisCli != nil {
 		redisCli.Close()
+	}
+	if err := g.Wait(); err != nil {
+		log.Fatalf("server error: %v", err)
 	}
 }

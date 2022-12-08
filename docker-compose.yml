@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   dokkoi:
     image: golang:1.17
@@ -11,6 +11,8 @@ services:
       DISCORD_TOKEN: $DISCORD_TOKEN
       CUSTOMSEARCH_API_KEY: $CUSTOMSEARCH_API_KEY
       CUSTOMSEARCH_ENGINE_ID: $CUSTOMSEARCH_ENGINE_ID
+    ports:
+      - 10000:10000
     depends_on:
       - redis
   redis:
