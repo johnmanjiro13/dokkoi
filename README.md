@@ -1,6 +1,9 @@
 # dokkoi
 ![](https://github.com/johnmanjiro13/dokkoi/workflows/test%20and%20build/badge.svg?branch=main)
 
+**This repository has been archived.
+Use [dokkoirb](https://github.com/johnmanjiro13/dokkoirb) instead.**
+
 dokkoi is a friendly discord bot.
 
 ## Installation
